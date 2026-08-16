@@ -508,165 +508,116 @@
     }
 
     /* ==========================================================================
-       SCREEN 06 — MUSIC PLAYER
+       SCREEN 06 — SPOTIFY LIVE LYRICS & VINYL SHOWCASE
        ========================================================================== */
     #screen-06 {
-      justify-content: space-between;
-      padding-top: calc(var(--safe-top) + 10px);
-      padding-bottom: calc(var(--safe-bottom) + 12px);
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: stretch;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 15%, rgba(255, 117, 151, 0.14) 0%, rgba(8, 8, 12, 0.78) 55%, rgba(5, 5, 8, 0.96) 100%);
     }
 
-    .player-header {
+    /* Spotify Top Header: Album Cover Sleeve + Spinning Vinyl + Title */
+    .spotify-header-card {
       width: 100%;
-      max-width: 480px;
+      padding: calc(var(--safe-top) + 12px) 24px 14px 24px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 0 4px 8px 4px;
+      gap: 16px;
+      background: linear-gradient(180deg, rgba(8, 8, 12, 0.95) 0%, rgba(8, 8, 12, 0.7) 80%, transparent 100%);
+      z-index: 20;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
-    .player-header-title {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .player-header-title::before {
-      content: '';
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent-pink);
-      box-shadow: 0 0 8px var(--accent-pink);
-    }
-
-    .btn-header-action {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--glass-border);
-      color: var(--text-muted);
-      border-radius: 999px;
-      padding: 6px 14px;
-      font-size: 12px;
-      font-family: var(--font-body);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .btn-header-action:hover {
-      background: rgba(255, 255, 255, 0.15);
-      color: #fff;
-    }
-
-    /* Vinyl + Album Cover Showcase */
-    .vinyl-stage-container {
+    /* Vinyl Sleeve Combo */
+    .spotify-vinyl-sleeve-combo {
       position: relative;
-      width: 100%;
-      max-width: 340px;
-      aspect-ratio: 1 / 1;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 64px;
+      height: 64px;
+      flex-shrink: 0;
     }
 
-    /* CSS Vinyl Record */
-    .vinyl-disc {
+    .spotify-album-cover {
       position: absolute;
-      width: 90%;
-      height: 90%;
+      left: 0;
+      top: 3px;
+      width: 58px;
+      height: 58px;
+      border-radius: 12px;
+      background-image: url('./image.jpg');
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      z-index: 2;
+    }
+
+    /* Spinning Vinyl emerging slightly from behind the album */
+    .spotify-vinyl-disc {
+      position: absolute;
+      right: -8px;
+      top: 6px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
-      background: radial-gradient(circle at center, 
-        #050505 0%, 
-        #121212 18%, 
-        #0d0d0d 22%, 
-        #1a1a1a 35%, 
-        #0e0e0e 45%, 
-        #181818 60%, 
-        #0b0b0b 75%, 
-        #1c1c1c 88%, 
+      background: radial-gradient(circle at center,
+        #0a0a0a 0%,
+        #1c1c1c 30%,
+        #0f0f0f 55%,
+        #222222 80%,
         #000000 100%
       );
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 
-                  inset 0 0 0 2px rgba(255, 255, 255, 0.05),
-                  inset 0 0 15px rgba(0, 0, 0, 0.9);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.85), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
       justify-content: center;
-      animation: spinVinyl 12s linear infinite;
-      animation-play-state: paused;
-      will-change: transform;
       z-index: 1;
+      animation: spinVinyl 8s linear infinite;
+      animation-play-state: running;
+      will-change: transform;
     }
 
-    /* Concentric grooves simulation */
-    .vinyl-disc::before {
+    .spotify-vinyl-disc::before {
       content: '';
       position: absolute;
-      inset: 8px;
+      inset: 4px;
       border-radius: 50%;
       background: repeating-radial-gradient(
         circle at center,
-        rgba(255, 255, 255, 0.03) 0px,
-        rgba(255, 255, 255, 0.03) 1px,
+        rgba(255, 255, 255, 0.05) 0px,
+        rgba(255, 255, 255, 0.05) 1px,
         transparent 2px,
-        transparent 4px
+        transparent 3px
       );
-      pointer-events: none;
     }
 
-    /* Metallic light reflection sheen across vinyl */
-    .vinyl-disc::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      background: conic-gradient(
-        from 45deg,
-        rgba(255, 255, 255, 0.08) 0deg,
-        transparent 60deg,
-        rgba(255, 255, 255, 0.12) 120deg,
-        transparent 180deg,
-        rgba(255, 255, 255, 0.08) 240deg,
-        transparent 300deg,
-        rgba(255, 255, 255, 0.12) 360deg
-      );
-      pointer-events: none;
-    }
-
-    /* Center Label of Vinyl with image.jpg */
-    .vinyl-center-label {
-      position: relative;
-      width: 38%;
-      height: 38%;
+    .spotify-vinyl-center {
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       background-image: url('./image.jpg');
       background-size: cover;
       background-position: center;
-      border: 3px solid #111;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border: 1.5px solid #222;
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+      position: relative;
     }
 
-    /* Spindle center hole */
-    .vinyl-spindle-hole {
-      width: 14px;
-      height: 14px;
+    .spotify-vinyl-center::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 4px;
+      height: 4px;
       border-radius: 50%;
       background: #08080c;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.9);
     }
 
     @keyframes spinVinyl {
@@ -674,395 +625,160 @@
       to { transform: rotate(360deg); }
     }
 
-    /* Song Meta Details */
-    .player-track-info {
-      text-align: center;
-      margin: 12px 0 8px 0;
-      width: 100%;
-      max-width: 480px;
-    }
-
-    .player-song-title {
-      font-family: var(--font-display);
-      font-size: clamp(22px, 6vw, 28px);
-      font-weight: 600;
-      color: #ffffff;
-      line-height: 1.2;
-      margin-bottom: 4px;
-    }
-
-    .player-artist-name {
-      font-size: clamp(14px, 4vw, 16px);
-      color: var(--accent-pink);
-      font-weight: 400;
-      letter-spacing: 0.5px;
-    }
-
-    /* Mini Lyric Preview snippet in Player */
-    .player-lyric-preview-box {
-      width: 100%;
-      max-width: 460px;
-      margin: 8px auto 14px auto;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      padding: 12px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      cursor: pointer;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      transition: all 0.3s ease;
-    }
-
-    .player-lyric-preview-box:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 117, 151, 0.3);
-      transform: translateY(-1px);
-    }
-
-    .lyric-preview-content {
+    /* Track Meta Info */
+    .spotify-track-meta {
       flex: 1;
       overflow: hidden;
-      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
-    .lyric-preview-label {
-      font-size: 10px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 2px;
+    .spotify-track-tag {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--accent-pink);
+      text-transform: uppercase;
+      margin-bottom: 2px;
     }
 
-    .lyric-preview-text {
-      font-size: 14px;
-      font-weight: 400;
-      color: #fff;
+    /* Soundwave animated bars */
+    .spotify-equalizer-bars {
+      display: inline-flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 10px;
+    }
+
+    .spotify-equalizer-bars span {
+      display: block;
+      width: 2.5px;
+      background: var(--accent-pink);
+      border-radius: 99px;
+      animation: eqBounce 1.2s ease-in-out infinite alternate;
+    }
+
+    .spotify-equalizer-bars span:nth-child(1) { height: 40%; animation-delay: 0.1s; }
+    .spotify-equalizer-bars span:nth-child(2) { height: 90%; animation-delay: 0.3s; }
+    .spotify-equalizer-bars span:nth-child(3) { height: 60%; animation-delay: 0.2s; }
+    .spotify-equalizer-bars span:nth-child(4) { height: 100%; animation-delay: 0.4s; }
+
+    @keyframes eqBounce {
+      0% { height: 25%; }
+      100% { height: 100%; }
+    }
+
+    .spotify-track-title {
+      font-family: var(--font-display);
+      font-size: clamp(20px, 5vw, 24px);
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .btn-open-lyrics-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--accent-pink);
-      background: rgba(255, 117, 151, 0.12);
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255, 117, 151, 0.25);
-      flex-shrink: 0;
-    }
-
-    /* Player Controls Panel */
-    .player-controls-container {
-      width: 100%;
-      max-width: 480px;
-      background: rgba(14, 14, 20, 0.6);
-      border: 1px solid var(--glass-border);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border-radius: 26px;
-      padding: 18px 22px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-    }
-
-    /* Progress bar */
-    .progress-bar-wrapper {
-      width: 100%;
-      margin-bottom: 6px;
-      cursor: pointer;
-      padding: 8px 0;
-      position: relative;
-    }
-
-    .progress-track {
-      width: 100%;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.12);
-      border-radius: 999px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #ff7597, #ff9ebb);
-      border-radius: 999px;
-      box-shadow: 0 0 10px rgba(255, 117, 151, 0.6);
-      pointer-events: none;
-      transition: width 0.1s linear;
-    }
-
-    .progress-thumb-knob {
-      position: absolute;
-      top: 50%;
-      left: 0%;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #ffffff;
-      transform: translate(-50%, -50%) scale(0);
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.8), 0 0 10px var(--accent-pink);
-      pointer-events: none;
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .progress-bar-wrapper:hover .progress-thumb-knob,
-    .progress-bar-wrapper:active .progress-thumb-knob {
-      transform: translate(-50%, -50%) scale(1);
-    }
-
-    .progress-time-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-      color: var(--text-dim);
+    .spotify-track-artist {
       font-family: var(--font-body);
-      font-variant-numeric: tabular-nums;
-      margin-bottom: 12px;
-    }
-
-    /* Buttons Row */
-    .controls-btn-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .btn-ctrl {
-      background: none;
-      border: none;
+      font-size: 14px;
       color: var(--text-muted);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
-      border-radius: 50%;
-      transition: all 0.25s ease;
-      font-size: 18px;
-    }
-
-    .btn-ctrl:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.08);
-      transform: scale(1.08);
-    }
-
-    .btn-ctrl:active {
-      transform: scale(0.92);
-    }
-
-    .btn-ctrl-play-main {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #ff7597, #e65c83);
-      color: #ffffff;
-      border: none;
-      font-size: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 24px rgba(255, 117, 151, 0.4);
-      cursor: pointer;
-      transition: all 0.3s var(--ease-smooth);
-    }
-
-    .btn-ctrl-play-main:hover {
-      transform: scale(1.06);
-      box-shadow: 0 12px 30px rgba(255, 117, 151, 0.6);
-    }
-
-    .btn-ctrl-play-main:active {
-      transform: scale(0.95);
-    }
-
-    /* Volume Slider Popover / Row */
-    .volume-control-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .vol-slider {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 70px;
-      height: 4px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.2);
-      outline: none;
-    }
-
-    .vol-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #ffffff;
-      cursor: pointer;
-      box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
-    }
-
-    /* ==========================================================================
-       SCREEN 07 — FULL lyrics
-       ========================================================================== */
-    #screen-07 {
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      font-weight: 300;
+      white-space: nowrap;
       overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .lyrics-top-bar {
-      width: 100%;
-      padding: calc(var(--safe-top) + 12px) 24px 12px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: linear-gradient(180deg, rgba(8, 8, 12, 0.85) 0%, transparent 100%);
-      z-index: 15;
-    }
-
-    .btn-lyrics-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--glass-border);
-      color: #ffffff;
-      padding: 8px 16px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-family: var(--font-body);
-      cursor: pointer;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      transition: all 0.3s;
-    }
-
-    .btn-lyrics-back:hover {
-      background: rgba(255, 255, 255, 0.16);
-      transform: translateX(-2px);
-    }
-
-    .lyrics-song-tag {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--accent-pink);
-      letter-spacing: 0.5px;
-    }
-
-    /* Scrolling Lyrics Stage */
-    .lyrics-stage-container {
+    /* Fullscreen Live Lyrics Area */
+    .spotify-lyrics-stage {
       position: relative;
       flex: 1;
       width: 100%;
-      max-width: 680px;
+      max-width: 760px;
       margin: 0 auto;
       overflow-y: auto;
       overflow-x: hidden;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
-      padding: 40vh 24px 45vh 24px; /* Big top & bottom padding for center lock */
-      mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,1) 22%, rgba(0,0,0,1) 78%, transparent 100%);
-      -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,1) 22%, rgba(0,0,0,1) 78%, transparent 100%);
+      padding: 30vh 28px 45vh 28px;
+      mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,1) 16%, rgba(0,0,0,1) 82%, transparent 100%);
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,1) 16%, rgba(0,0,0,1) 82%, transparent 100%);
     }
 
-    /* Hide scrollbars for ultra clean look */
-    .lyrics-stage-container::-webkit-scrollbar {
+    .spotify-lyrics-stage::-webkit-scrollbar {
       display: none;
     }
-    .lyrics-stage-container {
+    .spotify-lyrics-stage {
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
 
-    .lyrics-list {
+    .spotify-lyrics-list {
       display: flex;
       flex-direction: column;
-      gap: 22px;
-      text-align: center;
+      gap: 26px;
+      text-align: left;
     }
 
-    /* Individual Lyric Line */
+    /* Spotify Big Typography Lyrics */
     .lyric-line {
       position: relative;
-      display: inline-block;
+      display: block;
       font-family: var(--font-display);
-      font-size: clamp(18px, 5vw, 26px);
-      font-weight: 300;
-      line-height: 1.45;
-      color: rgba(255, 255, 255, 0.35);
+      font-size: clamp(28px, 6.8vw, 42px);
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: -0.2px;
+      color: rgba(255, 255, 255, 0.28);
       cursor: pointer;
-      padding: 6px 12px;
+      padding: 6px 10px;
       border-radius: 12px;
-      transform: scale(0.92);
-      transform-origin: center center;
-      transition: color 0.4s ease, opacity 0.4s ease, transform 0.4s var(--ease-smooth), font-weight 0.3s ease;
-      will-change: transform, opacity;
+      transform-origin: left center;
+      transition: color 0.35s ease, opacity 0.35s ease, transform 0.35s var(--ease-smooth), text-shadow 0.35s ease;
+      will-change: transform, opacity, color;
     }
 
     .lyric-line:hover {
-      color: rgba(255, 255, 255, 0.7);
-    }
-
-    /* Close neighbors (-1 and +1) */
-    .lyric-line.neighbor-1 {
-      opacity: 0.65;
-      transform: scale(0.96);
       color: rgba(255, 255, 255, 0.65);
     }
 
-    /* Distant neighbors (-2 and +2) */
+    /* Distant & Neighbor styling */
+    .lyric-line.neighbor-1 {
+      opacity: 0.6;
+      color: rgba(255, 255, 255, 0.55);
+    }
+
     .lyric-line.neighbor-2 {
       opacity: 0.35;
-      transform: scale(0.9);
-      color: rgba(255, 255, 255, 0.35);
+      color: rgba(255, 255, 255, 0.3);
     }
 
-    /* ACTIVE LYRIC LINE */
+    /* ACTIVE LYRIC (SPOTIFY STYLE) */
     .lyric-line.active {
       opacity: 1;
-      transform: scale(1.08);
-      font-weight: 600;
+      transform: scale(1.03);
+      font-weight: 700;
       color: #ffffff;
-      text-shadow: 0 0 25px rgba(255, 117, 151, 0.4);
+      text-shadow: 0 0 28px rgba(255, 117, 151, 0.45);
     }
 
-    /* Dynamic lyrics Gradient Highlight from Left to Right */
     .lyric-highlight-text {
       position: relative;
-      display: inline-block;
+      display: inline;
       background: linear-gradient(
         90deg,
         #ff7597 0%,
         #ffffff var(--line-progress, 0%),
-        rgba(255, 255, 255, 0.35) var(--line-progress, 0%),
-        rgba(255, 255, 255, 0.35) 100%
+        rgba(255, 255, 255, 0.28) var(--line-progress, 0%),
+        rgba(255, 255, 255, 0.28) 100%
       );
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      transition: background 0.05s linear;
+      transition: background 0.04s linear;
     }
 
     .lyric-line:not(.active) .lyric-highlight-text {
@@ -1070,39 +786,29 @@
       -webkit-text-fill-color: inherit;
     }
 
-    /* lyrics Bottom Mini Controller */
-    .lyrics-bottom-bar {
+    /* Minimal Bottom Line Progress */
+    .spotify-bottom-bar {
       width: 100%;
-      padding: 12px 24px calc(var(--safe-bottom) + 12px) 24px;
-      background: linear-gradient(0deg, rgba(8, 8, 12, 0.95) 0%, rgba(8, 8, 12, 0.6) 80%, transparent 100%);
-      z-index: 15;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
+      padding: 0 0 calc(var(--safe-bottom) + 6px) 0;
+      z-index: 20;
     }
 
-    .lyrics-mini-controls {
+    .spotify-progress-track {
       width: 100%;
-      max-width: 500px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      height: 3.5px;
+      background: rgba(255, 255, 255, 0.08);
+      position: relative;
     }
 
-    .lyrics-progress-box {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .lyrics-time-tag {
-      font-size: 12px;
-      font-variant-numeric: tabular-nums;
-      color: var(--text-muted);
-      min-width: 36px;
+    .spotify-progress-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff7597, #ffffff);
+      box-shadow: 0 0 10px rgba(255, 117, 151, 0.8);
+      transition: width 0.1s linear;
     }
 
     /* ==========================================================================
@@ -1227,8 +933,8 @@
 </head>
 <body>
 
-  <!-- Audio Element (Single source: ./music.mp3) -->
-  <audio id="audio" src="./music.mp3" preload="metadata"></audio>
+  <!-- Audio Element (Source: ./rak.mp3) -->
+  <audio id="audio" src="./rak.mp3" preload="metadata"></audio>
 
   <!-- Global Dynamic Background Layer -->
   <div id="global-bg-container">
@@ -1339,159 +1045,44 @@
     </section>
 
     <!-- ==========================================
-         SCREEN 06 — MUSIC PLAYER
+         SCREEN 06 — SPOTIFY LIVE LYRICS PLAYER
          ========================================== -->
-    <section id="screen-06" class="screen" aria-label="เครื่องเล่นเพลง">
+    <section id="screen-06" class="screen" aria-label="Spotify Live Lyrics">
       
-      <!-- Top Navigation Bar -->
-      <div class="player-header">
-        <div class="player-header-title">NOW PLAYING</div>
-        <button class="btn-header-action" onclick="goToScreen('screen-02')" aria-label="อ่านเรื่องราวอีกครั้ง">
-          <span>📖 เรื่องราว</span>
-        </button>
-      </div>
-
-      <!-- Vinyl Record Display -->
-      <div class="vinyl-stage-container">
-        <div id="vinyl-record" class="vinyl-disc">
-          <div class="vinyl-center-label">
-            <div class="vinyl-spindle-hole"></div>
+      <!-- Spotify Header: Album Art & Spinning Vinyl + Track Info -->
+      <div class="spotify-header-card">
+        <div class="spotify-vinyl-sleeve-combo">
+          <div class="spotify-album-cover"></div>
+          <div id="vinyl-record" class="spotify-vinyl-disc">
+            <div class="spotify-vinyl-center"></div>
           </div>
         </div>
-      </div>
-
-      <!-- Track Information -->
-      <div class="player-track-info">
-        <h2 class="player-song-title">เพลงรัก</h2>
-        <div class="player-artist-name">Three Man Down</div>
-      </div>
-
-      <!-- Mini Lyric Preview Box -->
-      <div class="player-lyric-preview-box" id="mini-lyric-box" onclick="goToScreen('screen-07')" aria-label="เปิดหน้าเนื้อเพลงคาราโอเกะ">
-        <div class="lyric-preview-content">
-          <div class="lyric-preview-label">── LYRICS PREVIEW ──</div>
-          <div class="lyric-preview-text" id="mini-lyric-text">กำลังโหลดเนื้อเพลง...</div>
-        </div>
-        <div class="btn-open-lyrics-badge">
-          <span>lyrics</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
-          </svg>
-        </div>
-      </div>
-
-      <!-- Audio Controls Card -->
-      <div class="player-controls-container">
-        <!-- Seek Progress Bar -->
-        <div class="progress-bar-wrapper" id="progress-wrapper" role="slider" aria-label="แถบความคืบหน้าเพลง" tabindex="0">
-          <div class="progress-track">
-            <div class="progress-fill" id="progress-fill"></div>
-            <div class="progress-thumb-knob" id="progress-knob"></div>
+        <div class="spotify-track-meta">
+          <div class="spotify-track-tag">
+            <span class="spotify-equalizer-bars">
+              <span></span><span></span><span></span><span></span>
+            </span>
+            <span>LIVE LYRICS</span>
           </div>
-        </div>
-
-        <div class="progress-time-row">
-          <span id="current-time-text">0:00</span>
-          <span id="duration-time-text">0:00</span>
-        </div>
-
-        <!-- Buttons Row -->
-        <div class="controls-btn-row">
-          <!-- Replay Button -->
-          <button class="btn-ctrl" id="btn-replay" aria-label="เริ่มเล่นใหม่" title="เริ่มใหม่">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="1 4 1 10 7 10"></polyline>
-              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
-            </svg>
-          </button>
-
-          <!-- Skip 10s Backward -->
-          <button class="btn-ctrl" id="btn-skip-back" aria-label="ย้อนหลัง 10 วินาที" title="ย้อน 10s">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/>
-            </svg>
-          </button>
-
-          <!-- Play / Pause Main Button -->
-          <button class="btn-ctrl-play-main" id="btn-main-play" aria-label="เล่นหรือหยุดเพลง">
-            <svg id="play-icon" width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-              <polygon points="6 4 20 12 6 20 6 4"></polygon>
-            </svg>
-            <svg id="pause-icon" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
-              <rect x="6" y="4" width="4" height="16"></rect>
-              <rect x="14" y="4" width="4" height="16"></rect>
-            </svg>
-          </button>
-
-          <!-- Skip 10s Forward -->
-          <button class="btn-ctrl" id="btn-skip-forward" aria-label="ข้ามไปข้างหน้า 10 วินาที" title="ข้าม 10s">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M13 17l5-5-5-5M6 17l5-5-5-5"/>
-            </svg>
-          </button>
-
-          <!-- Open lyrics Full Button -->
-          <button class="btn-ctrl" onclick="goToScreen('screen-07')" aria-label="เปิดโหมดคาราโอเกะ" title="เนื้อเพลง">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 18V5l12-2v13"></path>
-              <circle cx="6" cy="18" r="3"></circle>
-              <circle cx="18" cy="16" r="3"></circle>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==========================================
-         SCREEN 07 — FULL lyrics
-         ========================================== -->
-    <section id="screen-07" class="screen" aria-label="หน้าจอเนื้อเพลงคาราโอเกะ">
-      <!-- Top Bar -->
-      <div class="lyrics-top-bar">
-        <button class="btn-lyrics-back" onclick="goToScreen('screen-06')" aria-label="กลับไปหน้าเครื่องเล่น">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="15 18 9 12 15 6"></polyline>
-          </svg>
-          <span>เครื่องเล่น</span>
-        </button>
-        <div class="lyrics-song-tag">✦ เพลงรัก — Three Man Down ✦</div>
-      </div>
-
-      <!-- lyrics Scrolling Area -->
-      <div class="lyrics-stage-container" id="lyrics-scroll-container">
-        <div class="lyrics-list" id="lyrics-list-container">
-          <!-- Lyric lines generated by JavaScript -->
+          <h2 class="spotify-track-title">เพลงรัก</h2>
+          <div class="spotify-track-artist">Three Man Down</div>
         </div>
       </div>
 
-      <!-- lyrics Bottom Bar -->
-      <div class="lyrics-bottom-bar">
-        <div class="lyrics-mini-controls">
-          <button class="btn-ctrl" id="btn-lyrics-play-toggle" aria-label="เล่นหรือหยุดเพลง">
-            <svg id="lyrics-play-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <polygon points="6 4 20 12 6 20 6 4"></polygon>
-            </svg>
-            <svg id="lyrics-pause-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
-              <rect x="6" y="4" width="4" height="16"></rect>
-              <rect x="14" y="4" width="4" height="16"></rect>
-            </svg>
-          </button>
-
-          <div class="lyrics-progress-box">
-            <span class="lyrics-time-tag" id="lyrics-current-time">0:00</span>
-            <div class="progress-bar-wrapper" id="lyrics-progress-wrapper" style="flex:1; margin-bottom:0;">
-              <div class="progress-track" style="height: 4px;">
-                <div class="progress-fill" id="lyrics-progress-fill"></div>
-              </div>
-            </div>
-            <span class="lyrics-time-tag" id="lyrics-duration-time">0:00</span>
-          </div>
-
-          <button class="btn-ctrl" onclick="goToScreen('screen-08')" aria-label="ดูตอนจบ" title="ข้อความส่งท้าย">
-            <span style="font-size: 16px;">♡</span>
-          </button>
+      <!-- Immersive Spotify Live Lyrics Stage -->
+      <div class="spotify-lyrics-stage" id="lyrics-scroll-container">
+        <div class="spotify-lyrics-list" id="lyrics-list-container">
+          <!-- Lyric lines dynamically injected -->
         </div>
       </div>
+
+      <!-- Subtle Minimal Bottom Progress Indicator -->
+      <div class="spotify-bottom-bar" id="progress-wrapper">
+        <div class="spotify-progress-track">
+          <div class="spotify-progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+
     </section>
 
     <!-- ==========================================
@@ -1574,28 +1165,11 @@
       const audio = document.getElementById('audio');
       const globalBg = document.getElementById('global-bg');
       const screens = document.querySelectorAll('.screen');
-      
       const vinylRecord = document.getElementById('vinyl-record');
-      const btnMainPlay = document.getElementById('btn-main-play');
-      const playIcon = document.getElementById('play-icon');
-      const pauseIcon = document.getElementById('pause-icon');
-      const btnlyricsPlayToggle = document.getElementById('btn-lyrics-play-toggle');
-      const lyricsPlayIcon = document.getElementById('lyrics-play-icon');
-      const lyricsPauseIcon = document.getElementById('lyrics-pause-icon');
-
       const progressWrapper = document.getElementById('progress-wrapper');
       const progressFill = document.getElementById('progress-fill');
-      const progressKnob = document.getElementById('progress-knob');
-      const currentTimeText = document.getElementById('current-time-text');
-      const durationTimeText = document.getElementById('duration-time-text');
-
-      const miniLyricText = document.getElementById('mini-lyric-text');
       const lyricsListContainer = document.getElementById('lyrics-list-container');
       const lyricsScrollContainer = document.getElementById('lyrics-scroll-container');
-      const lyricsProgressFill = document.getElementById('lyrics-progress-fill');
-      const lyricsProgressWrapper = document.getElementById('lyrics-progress-wrapper');
-      const lyricsCurrentTime = document.getElementById('lyrics-current-time');
-      const lyricsDurationTime = document.getElementById('lyrics-duration-time');
 
       let currentScreenId = 'screen-01';
       let storyTimer = null;
@@ -1639,15 +1213,18 @@
           void nextScreen.offsetWidth; // trigger reflow
           nextScreen.classList.add('revealed');
           storyTimer = setTimeout(() => { showScreen('screen-06'); }, 3200);
-        } else if (screenId === 'screen-07') {
-          // Immediately align lyrics
-          scrollActiveLyricIntoView(activeLyricIndex, true);
+        } else if (screenId === 'screen-06') {
+          // Center current lyric immediately upon entering player
+          setTimeout(() => {
+            scrollActiveLyricIntoView(activeLyricIndex, true);
+          }, 100);
         }
       }
 
       window.goToScreen = showScreen;
 
       function updateBackgroundState(screenId) {
+        if (!globalBg) return;
         globalBg.className = 'bg-image';
         switch (screenId) {
           case 'screen-01':
@@ -1666,21 +1243,19 @@
             globalBg.classList.add('bg-state-intro');
             break;
           case 'screen-06':
-            globalBg.classList.add('bg-state-player');
-            break;
-          case 'screen-07':
             globalBg.classList.add('bg-state-lyrics');
             break;
           case 'screen-08':
             globalBg.classList.add('bg-state-ending');
             break;
           default:
-            globalBg.classList.add('bg-state-player');
+            globalBg.classList.add('bg-state-lyrics');
         }
       }
 
-      /* --- 4. BUILD lyrics DOM --- */
+      /* --- 4. BUILD LYRICS DOM --- */
       function initlyricsDOM() {
+        if (!lyricsListContainer) return;
         lyricsListContainer.innerHTML = '';
         lyricLineElements = [];
 
@@ -1697,9 +1272,11 @@
 
           // Click on lyric to seek
           lineEl.addEventListener('click', () => {
-            audio.currentTime = item.time;
-            if (audio.paused) {
-              audio.play().catch(() => {});
+            if (audio) {
+              audio.currentTime = item.time;
+              if (audio.paused) {
+                audio.play().catch(() => {});
+              }
             }
           });
 
@@ -1709,30 +1286,18 @@
       }
 
       /* --- 5. AUDIO PLAYBACK & SYNC --- */
-      function formatTime(seconds) {
-        if (isNaN(seconds) || seconds < 0) return '0:00';
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-      }
-
       function updatePlayStateUI(isPlaying) {
-        if (isPlaying) {
-          vinylRecord.style.animationPlayState = 'running';
-          playIcon.style.display = 'none';
-          pauseIcon.style.display = 'block';
-          lyricsPlayIcon.style.display = 'none';
-          lyricsPauseIcon.style.display = 'block';
-        } else {
-          vinylRecord.style.animationPlayState = 'paused';
-          playIcon.style.display = 'block';
-          pauseIcon.style.display = 'none';
-          lyricsPlayIcon.style.display = 'block';
-          lyricsPauseIcon.style.display = 'none';
+        if (vinylRecord) {
+          vinylRecord.style.animationPlayState = isPlaying ? 'running' : 'paused';
         }
+        const eqBars = document.querySelectorAll('.spotify-equalizer-bars span');
+        eqBars.forEach(bar => {
+          bar.style.animationPlayState = isPlaying ? 'running' : 'paused';
+        });
       }
 
       function togglePlayPause() {
+        if (!audio) return;
         if (audio.paused) {
           audio.play().then(() => {
             updatePlayStateUI(true);
@@ -1746,35 +1311,28 @@
       }
 
       // Audio Event Listeners
-      audio.addEventListener('play', () => updatePlayStateUI(true));
-      audio.addEventListener('pause', () => updatePlayStateUI(false));
-      
-      audio.addEventListener('loadedmetadata', () => {
-        const dur = audio.duration || 265;
-        durationTimeText.textContent = formatTime(dur);
-        lyricsDurationTime.textContent = formatTime(dur);
-      });
+      if (audio) {
+        audio.addEventListener('play', () => updatePlayStateUI(true));
+        audio.addEventListener('pause', () => updatePlayStateUI(false));
 
-      audio.addEventListener('ended', () => {
-        updatePlayStateUI(false);
-        showScreen('screen-08');
-      });
+        audio.addEventListener('ended', () => {
+          updatePlayStateUI(false);
+          showScreen('screen-08');
+        });
+      }
 
       // Synchronize lyrics and Progress on every Frame / Time Update
       function synclyricsAndProgress() {
-        if (!audio.duration || isSeeking) return;
+        if (!audio || !audio.duration || isSeeking) return;
 
         const curTime = audio.currentTime;
         const totalDuration = audio.duration;
         const progressPercent = (curTime / totalDuration) * 100;
 
-        // Update Progress Bars
-        progressFill.style.width = `${progressPercent}%`;
-        progressKnob.style.left = `${progressPercent}%`;
-        lyricsProgressFill.style.width = `${progressPercent}%`;
-
-        currentTimeText.textContent = formatTime(curTime);
-        lyricsCurrentTime.textContent = formatTime(curTime);
+        // Update Progress Bar
+        if (progressFill) {
+          progressFill.style.width = `${progressPercent}%`;
+        }
 
         // Find Active Lyric Index
         let currentIdx = -1;
@@ -1789,16 +1347,9 @@
         if (currentIdx !== activeLyricIndex) {
           activeLyricIndex = currentIdx;
           updateLyricClasses(activeLyricIndex);
-          if (currentScreenId === 'screen-07') {
+          if (currentScreenId === 'screen-06') {
             scrollActiveLyricIntoView(activeLyricIndex);
           }
-        }
-
-        // Mini lyric preview text update
-        if (activeLyricIndex >= 0 && activeLyricIndex < LYRICS_DATA.length) {
-          miniLyricText.textContent = LYRICS_DATA[activeLyricIndex].text;
-        } else {
-          miniLyricText.textContent = "Three Man Down — เพลงรัก";
         }
 
         // Intra-line lyrics Progress Highlighting (Left to Right Fill)
@@ -1845,7 +1396,7 @@
       }
 
       function scrollActiveLyricIntoView(index, immediate = false) {
-        if (index < 0 || index >= lyricLineElements.length) return;
+        if (!lyricsScrollContainer || index < 0 || index >= lyricLineElements.length) return;
         const targetEl = lyricLineElements[index];
         if (!targetEl) return;
 
@@ -1870,12 +1421,13 @@
 
       /* --- 6. SEEK & PROGRESS INTERACTION --- */
       function setupSeekControl(wrapperEl) {
+        if (!wrapperEl) return;
         function seek(e) {
           const rect = wrapperEl.getBoundingClientRect();
           const clientX = e.touches ? e.touches[0].clientX : e.clientX;
           const pos = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
           
-          if (audio.duration) {
+          if (audio && audio.duration) {
             audio.currentTime = pos * audio.duration;
             synclyricsAndProgress();
           }
@@ -1910,47 +1462,40 @@
       }
 
       setupSeekControl(progressWrapper);
-      setupSeekControl(lyricsProgressWrapper);
 
       /* --- 7. BUTTON CONTROLS & EVENT HANDLERS --- */
       // Welcome Screen Start Button
-      document.getElementById('btn-start-story').addEventListener('click', () => {
-        // Unlock audio autoplay on user gesture
-        audio.play().then(() => {
-          updatePlayStateUI(true);
-        }).catch(() => {
-          // graceful handle if file not found or browser restricted
+      const btnStartStory = document.getElementById('btn-start-story');
+      if (btnStartStory) {
+        btnStartStory.addEventListener('click', () => {
+          if (audio) {
+            audio.play().then(() => {
+              updatePlayStateUI(true);
+            }).catch(() => {
+              // graceful handle autoplay restriction
+            });
+          }
+          showScreen('screen-02');
         });
-        showScreen('screen-02');
-      });
+      }
 
-      // Main Play / Pause Button
-      btnMainPlay.addEventListener('click', togglePlayPause);
-      btnlyricsPlayToggle.addEventListener('click', togglePlayPause);
-
-      // Skip 10s Forward & Backward
-      document.getElementById('btn-skip-forward').addEventListener('click', () => {
-        if (audio.duration) {
-          audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
-        }
-      });
-
-      document.getElementById('btn-skip-back').addEventListener('click', () => {
-        audio.currentTime = Math.max(0, audio.currentTime - 10);
-      });
-
-      // Replay Track Button
-      document.getElementById('btn-replay').addEventListener('click', () => {
-        audio.currentTime = 0;
-        audio.play().catch(() => {});
-      });
+      // Optional Tap on Vinyl / Header combo to Toggle Play/Pause
+      const headerCard = document.querySelector('.spotify-header-card');
+      if (headerCard) {
+        headerCard.addEventListener('click', togglePlayPause);
+      }
 
       // Ending Screen Replay Button
-      document.getElementById('btn-replay-all').addEventListener('click', () => {
-        audio.currentTime = 0;
-        audio.play().catch(() => {});
-        showScreen('screen-02');
-      });
+      const btnReplayAll = document.getElementById('btn-replay-all');
+      if (btnReplayAll) {
+        btnReplayAll.addEventListener('click', () => {
+          if (audio) {
+            audio.currentTime = 0;
+            audio.play().catch(() => {});
+          }
+          showScreen('screen-02');
+        });
+      }
 
       /* --- 8. SWIPE GESTURE SUPPORT ON STORY SCREENS --- */
       let touchStartX = 0;
@@ -1992,12 +1537,9 @@
           e.preventDefault();
           togglePlayPause();
         } else if (e.code === 'ArrowRight') {
-          audio.currentTime = Math.min(audio.duration || 300, audio.currentTime + 5);
+          if (audio) audio.currentTime = Math.min(audio.duration || 300, audio.currentTime + 5);
         } else if (e.code === 'ArrowLeft') {
-          audio.currentTime = Math.max(0, audio.currentTime - 5);
-        } else if (e.key === 'l' || e.key === 'L') {
-          if (currentScreenId === 'screen-06') showScreen('screen-07');
-          else if (currentScreenId === 'screen-07') showScreen('screen-06');
+          if (audio) audio.currentTime = Math.max(0, audio.currentTime - 5);
         }
       });
 
@@ -2014,7 +1556,7 @@
           height = canvas.height = window.innerHeight;
         });
 
-        const particles = Array.from({ length: 28 }, () => ({
+        const particles = Array.from({ length: 24 }, () => ({
           x: Math.random() * width,
           y: Math.random() * height,
           size: Math.random() * 2 + 1,
