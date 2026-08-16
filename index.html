@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>เพลงรัก — Three Man Down | For someone</title>
+  
+  <!-- Google Fonts: Kanit & Prompt & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,300&family=Playfair+Display:ital,wght@0,600;1,400;1,600&family=Prompt:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       CSS VARIABLES & RESET
+       ========================================================================== */
+    :root {
+      --bg-dark: #08080c;
+      --bg-card: rgba(255, 255, 255, 0.05);
+      --bg-glass: rgba(18, 18, 26, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-border-light: rgba(255, 255, 255, 0.22);
+      
+      --text-main: #f5f5f7;
+      --text-muted: rgba(245, 245, 247, 0.6);
+      --text-dim: rgba(245, 245, 247, 0.35);
+      
+      --accent-pink: #ff7597;
+      --accent-pink-glow: rgba(255, 117, 151, 0.45);
+      --accent-rose: #e65c83;
+      --accent-gold: #f3cf98;
+      --accent-purple: #9d72ff;
+      
+      --font-display: 'Kanit', sans-serif;
+      --font-body: 'Prompt', sans-serif;
+      --font-serif: 'Playfair Display', serif;
+      
+      --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+      --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+      
+      --safe-top: env(safe-area-inset-top, 20px);
+      --safe-bottom: env(safe-area-inset-bottom, 20px);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow: hidden;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.6;
+      position: fixed;
+      inset: 0;
+    }
+
+    /* ==========================================================================
+       GLOBAL PERSISTENT BACKGROUND & AMBIENT GLOW
+       ========================================================================== */
+    #global-bg-container {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .bg-image {
+      position: absolute;
+      inset: -20px;
+      width: calc(100% + 40px);
+      height: calc(100% + 40px);
+      background-image: url('./image.jpg');
+      background-size: cover;
+      background-position: center;
+      transition: filter 1.6s var(--ease-cinematic), transform 2.5s var(--ease-cinematic), opacity 1.2s ease;
+      will-change: transform, filter, opacity;
+    }
+
+    /* Dynamic background states per screen */
+    .bg-state-welcome {
+      filter: blur(14px) brightness(0.4) saturate(1.2);
+      transform: scale(1.08);
+      animation: ambientSlowZoom 24s ease-in-out infinite alternate;
+    }
+
+    .bg-state-story-1 {
+      filter: blur(18px) brightness(0.35) saturate(1.1);
+      transform: scale(1.15) translate(-2%, 2%);
+    }
+
+    .bg-state-story-2 {
+      filter: blur(20px) brightness(0.3) saturate(1.3) hue-rotate(-10deg);
+      transform: scale(1.18) translate(2%, -2%);
+    }
+
+    .bg-state-story-3 {
+      filter: blur(16px) brightness(0.38) saturate(1.25);
+      transform: scale(1.22) translate(0, 1%);
+    }
+
+    .bg-state-intro {
+      filter: blur(30px) brightness(0.15) saturate(0.8);
+      transform: scale(1.3);
+    }
+
+    .bg-state-player {
+      filter: blur(22px) brightness(0.35) saturate(1.2);
+      transform: scale(1.1);
+    }
+
+    .bg-state-karaoke {
+      filter: blur(24px) brightness(0.22) saturate(1.3);
+      transform: scale(1.15);
+    }
+
+    .bg-state-ending {
+      filter: blur(16px) brightness(0.32) saturate(1.15);
+      transform: scale(1.12);
+      animation: ambientSlowZoom 30s ease-in-out infinite alternate;
+    }
+
+    @keyframes ambientSlowZoom {
+      0% { transform: scale(1.05) translate(0, 0); }
+      50% { transform: scale(1.12) translate(-1%, 1%); }
+      100% { transform: scale(1.08) translate(1%, -1%); }
+    }
+
+    .bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 40%, rgba(255, 117, 151, 0.08) 0%, rgba(8, 8, 12, 0.6) 60%, rgba(8, 8, 12, 0.95) 100%);
+      pointer-events: none;
+    }
+
+    .bg-vignette {
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.85);
+      pointer-events: none;
+    }
+
+    /* Ambient floating dust/sparkle particles */
+    #ambient-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.65;
+    }
+
+    /* ==========================================================================
+       SPA SCREEN ARCHITECTURE
+       ========================================================================== */
+    .app-viewport {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: calc(var(--safe-top) + 16px) 24px calc(var(--safe-bottom) + 16px) 24px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: scale(0.96) translateY(12px);
+      transition: opacity 0.8s var(--ease-cinematic), transform 0.8s var(--ease-cinematic), visibility 0.8s;
+      z-index: 2;
+    }
+
+    .screen.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: scale(1) translateY(0);
+      z-index: 5;
+    }
+
+    .screen.screen-exit-up {
+      opacity: 0;
+      transform: scale(1.02) translateY(-24px);
+    }
+
+    .screen.screen-exit-down {
+      opacity: 0;
+      transform: scale(0.94) translateY(24px);
+    }
+
+    /* Container for centered narrative content */
+    .story-card {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 3;
+    }
+
+    /* ==========================================================================
+       SCREEN 01 — WELCOME
+       ========================================================================== */
+    #screen-01 .welcome-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-pink);
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(255, 117, 151, 0.15);
+      animation: pulseBadge 3s ease-in-out infinite;
+    }
+
+    @keyframes pulseBadge {
+      0%, 100% { transform: translateY(0); box-shadow: 0 4px 20px rgba(255, 117, 151, 0.15); }
+      50% { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255, 117, 151, 0.3); }
+    }
+
+    .heart-icon {
+      display: inline-block;
+      color: var(--accent-pink);
+      font-size: 26px;
+      filter: drop-shadow(0 0 12px var(--accent-pink-glow));
+      animation: heartBeat 2.2s infinite ease-in-out;
+      margin-bottom: 12px;
+    }
+
+    @keyframes heartBeat {
+      0%, 100% { transform: scale(1); }
+      14% { transform: scale(1.18); }
+      28% { transform: scale(1); }
+      42% { transform: scale(1.12); }
+      70% { transform: scale(1); }
+    }
+
+    #screen-01 .welcome-title {
+      font-family: var(--font-display);
+      font-size: clamp(26px, 7vw, 36px);
+      font-weight: 500;
+      line-height: 1.35;
+      color: #ffffff;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.7);
+      letter-spacing: -0.3px;
+    }
+
+    #screen-01 .welcome-subtitle {
+      font-size: clamp(14px, 4vw, 16px);
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* Premium Glassmorphic Button */
+    .btn-glass-start {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 16px 40px;
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: #ffffff;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 117, 151, 0.25) 100%);
+      border: 1px solid var(--glass-border-light);
+      border-radius: 999px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 25px rgba(255, 117, 151, 0.2);
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.4s var(--ease-smooth);
+    }
+
+    .btn-glass-start::before {
+      content: '';
+      position: absolute;
+      inset: -50%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+      transform: rotate(35deg) translateY(-100%);
+      transition: transform 0.8s ease;
+    }
+
+    .btn-glass-start:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 0 35px rgba(255, 117, 151, 0.4);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 117, 151, 0.35) 100%);
+    }
+
+    .btn-glass-start:hover::before {
+      transform: rotate(35deg) translateY(100%);
+    }
+
+    .btn-glass-start:active {
+      transform: scale(0.98);
+    }
+
+    /* ==========================================================================
+       SCREENS 02, 03, 04 — STORY PANELS
+       ========================================================================== */
+    .story-bubble {
+      background: rgba(14, 14, 20, 0.55);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 28px;
+      padding: 38px 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+      margin-bottom: 32px;
+      position: relative;
+    }
+
+    .story-text {
+      font-family: var(--font-body);
+      font-size: clamp(16px, 4.5vw, 19px);
+      font-weight: 300;
+      line-height: 1.85;
+      color: rgba(255, 255, 255, 0.92);
+      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+      word-break: break-word;
+    }
+
+    .story-text p {
+      margin-bottom: 14px;
+    }
+    .story-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Highlighted climax text in Screen 04 */
+    .highlight-climax {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.15em;
+      color: #fff;
+      background: linear-gradient(90deg, #ff8da7, #ffffff, #ffb8c9);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmerText 3s linear infinite, subtleGlow 2s ease-in-out infinite alternate;
+      margin-top: 8px;
+      filter: drop-shadow(0 0 14px rgba(255, 117, 151, 0.6));
+    }
+
+    @keyframes shimmerText {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    @keyframes subtleGlow {
+      from { transform: scale(1); filter: drop-shadow(0 0 8px rgba(255, 117, 151, 0.4)); }
+      to { transform: scale(1.03); filter: drop-shadow(0 0 18px rgba(255, 117, 151, 0.8)); }
+    }
+
+    /* Progress Indicators (● ○ ○) */
+    .story-dots {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .story-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.5s var(--ease-smooth);
+    }
+
+    .story-dot.active {
+      width: 24px;
+      border-radius: 999px;
+      background: var(--accent-pink);
+      box-shadow: 0 0 12px var(--accent-pink-glow);
+    }
+
+    .story-skip-hint {
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+      opacity: 0.8;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .story-skip-hint:hover {
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       SCREEN 05 — SONG INTRO (CINEMATIC REVEAL)
+       ========================================================================== */
+    #screen-05 {
+      background: radial-gradient(circle at center, rgba(18, 18, 28, 0.95) 0%, rgba(5, 5, 8, 1) 100%);
+    }
+
+    .intro-box {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .intro-badge {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 13px;
+      letter-spacing: 4px;
+      color: var(--accent-gold);
+      margin-bottom: 18px;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 1s ease 0.3s;
+    }
+
+    .intro-title {
+      font-family: var(--font-display);
+      font-size: clamp(34px, 10vw, 56px);
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: #ffffff;
+      line-height: 1.1;
+      margin-bottom: 10px;
+      opacity: 0;
+      transform: scale(0.92);
+      transition: all 1.2s var(--ease-cinematic) 0.6s;
+      text-shadow: 0 4px 30px rgba(0, 0, 0, 0.8);
+    }
+
+    .intro-artist {
+      font-family: var(--font-body);
+      font-size: clamp(16px, 5vw, 22px);
+      font-weight: 400;
+      color: var(--accent-pink);
+      letter-spacing: 2px;
+      margin-bottom: 30px;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 1s ease 0.9s;
+    }
+
+    .intro-preview-disc {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background-image: url('./image.jpg');
+      background-size: cover;
+      background-position: center;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 40px rgba(255, 117, 151, 0.3);
+      opacity: 0;
+      transform: scale(0.5) rotate(-30deg);
+      transition: all 1.4s var(--ease-cinematic) 1.2s;
+    }
+
+    #screen-05.revealed .intro-badge,
+    #screen-05.revealed .intro-title,
+    #screen-05.revealed .intro-artist,
+    #screen-05.revealed .intro-preview-disc {
+      opacity: 1;
+      transform: scale(1) translateY(0) rotate(0deg);
+    }
+
+    /* ==========================================================================
+       SCREEN 06 — MUSIC PLAYER
+       ========================================================================== */
+    #screen-06 {
+      justify-content: space-between;
+      padding-top: calc(var(--safe-top) + 10px);
+      padding-bottom: calc(var(--safe-bottom) + 12px);
+    }
+
+    .player-header {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4px 8px 4px;
+    }
+
+    .player-header-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .player-header-title::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-pink);
+      box-shadow: 0 0 8px var(--accent-pink);
+    }
+
+    .btn-header-action {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--glass-border);
+      color: var(--text-muted);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-header-action:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    /* Vinyl + Album Cover Showcase */
+    .vinyl-stage-container {
+      position: relative;
+      width: 100%;
+      max-width: 340px;
+      aspect-ratio: 1 / 1;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* CSS Vinyl Record */
+    .vinyl-disc {
+      position: absolute;
+      width: 90%;
+      height: 90%;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, 
+        #050505 0%, 
+        #121212 18%, 
+        #0d0d0d 22%, 
+        #1a1a1a 35%, 
+        #0e0e0e 45%, 
+        #181818 60%, 
+        #0b0b0b 75%, 
+        #1c1c1c 88%, 
+        #000000 100%
+      );
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 
+                  inset 0 0 0 2px rgba(255, 255, 255, 0.05),
+                  inset 0 0 15px rgba(0, 0, 0, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: spinVinyl 12s linear infinite;
+      animation-play-state: paused;
+      will-change: transform;
+      z-index: 1;
+    }
+
+    /* Concentric grooves simulation */
+    .vinyl-disc::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      background: repeating-radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.03) 0px,
+        rgba(255, 255, 255, 0.03) 1px,
+        transparent 2px,
+        transparent 4px
+      );
+      pointer-events: none;
+    }
+
+    /* Metallic light reflection sheen across vinyl */
+    .vinyl-disc::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 45deg,
+        rgba(255, 255, 255, 0.08) 0deg,
+        transparent 60deg,
+        rgba(255, 255, 255, 0.12) 120deg,
+        transparent 180deg,
+        rgba(255, 255, 255, 0.08) 240deg,
+        transparent 300deg,
+        rgba(255, 255, 255, 0.12) 360deg
+      );
+      pointer-events: none;
+    }
+
+    /* Center Label of Vinyl with image.jpg */
+    .vinyl-center-label {
+      position: relative;
+      width: 38%;
+      height: 38%;
+      border-radius: 50%;
+      background-image: url('./image.jpg');
+      background-size: cover;
+      background-position: center;
+      border: 3px solid #111;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Spindle center hole */
+    .vinyl-spindle-hole {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #08080c;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.9);
+    }
+
+    @keyframes spinVinyl {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Song Meta Details */
+    .player-track-info {
+      text-align: center;
+      margin: 12px 0 8px 0;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .player-song-title {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 6vw, 28px);
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .player-artist-name {
+      font-size: clamp(14px, 4vw, 16px);
+      color: var(--accent-pink);
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
+
+    /* Mini Lyric Preview snippet in Player */
+    .player-lyric-preview-box {
+      width: 100%;
+      max-width: 460px;
+      margin: 8px auto 14px auto;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.3s ease;
+    }
+
+    .player-lyric-preview-box:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 117, 151, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .lyric-preview-content {
+      flex: 1;
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .lyric-preview-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .lyric-preview-text {
+      font-size: 14px;
+      font-weight: 400;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .btn-open-lyrics-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--accent-pink);
+      background: rgba(255, 117, 151, 0.12);
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 117, 151, 0.25);
+      flex-shrink: 0;
+    }
+
+    /* Player Controls Panel */
+    .player-controls-container {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(14, 14, 20, 0.6);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-radius: 26px;
+      padding: 18px 22px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Progress bar */
+    .progress-bar-wrapper {
+      width: 100%;
+      margin-bottom: 6px;
+      cursor: pointer;
+      padding: 8px 0;
+      position: relative;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff7597, #ff9ebb);
+      border-radius: 999px;
+      box-shadow: 0 0 10px rgba(255, 117, 151, 0.6);
+      pointer-events: none;
+      transition: width 0.1s linear;
+    }
+
+    .progress-thumb-knob {
+      position: absolute;
+      top: 50%;
+      left: 0%;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #ffffff;
+      transform: translate(-50%, -50%) scale(0);
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.8), 0 0 10px var(--accent-pink);
+      pointer-events: none;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .progress-bar-wrapper:hover .progress-thumb-knob,
+    .progress-bar-wrapper:active .progress-thumb-knob {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .progress-time-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--text-dim);
+      font-family: var(--font-body);
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 12px;
+    }
+
+    /* Buttons Row */
+    .controls-btn-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .btn-ctrl {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      border-radius: 50%;
+      transition: all 0.25s ease;
+      font-size: 18px;
+    }
+
+    .btn-ctrl:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      transform: scale(1.08);
+    }
+
+    .btn-ctrl:active {
+      transform: scale(0.92);
+    }
+
+    .btn-ctrl-play-main {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff7597, #e65c83);
+      color: #ffffff;
+      border: none;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(255, 117, 151, 0.4);
+      cursor: pointer;
+      transition: all 0.3s var(--ease-smooth);
+    }
+
+    .btn-ctrl-play-main:hover {
+      transform: scale(1.06);
+      box-shadow: 0 12px 30px rgba(255, 117, 151, 0.6);
+    }
+
+    .btn-ctrl-play-main:active {
+      transform: scale(0.95);
+    }
+
+    /* Volume Slider Popover / Row */
+    .volume-control-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .vol-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 70px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.2);
+      outline: none;
+    }
+
+    .vol-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ffffff;
+      cursor: pointer;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ==========================================================================
+       SCREEN 07 — FULL KARAOKE
+       ========================================================================== */
+    #screen-07 {
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .karaoke-top-bar {
+      width: 100%;
+      padding: calc(var(--safe-top) + 12px) 24px 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(180deg, rgba(8, 8, 12, 0.85) 0%, transparent 100%);
+      z-index: 15;
+    }
+
+    .btn-karaoke-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--glass-border);
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-family: var(--font-body);
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.3s;
+    }
+
+    .btn-karaoke-back:hover {
+      background: rgba(255, 255, 255, 0.16);
+      transform: translateX(-2px);
+    }
+
+    .karaoke-song-tag {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent-pink);
+      letter-spacing: 0.5px;
+    }
+
+    /* Scrolling Lyrics Stage */
+    .karaoke-stage-container {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      padding: 40vh 24px 45vh 24px; /* Big top & bottom padding for center lock */
+      mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,1) 22%, rgba(0,0,0,1) 78%, transparent 100%);
+      -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,1) 22%, rgba(0,0,0,1) 78%, transparent 100%);
+    }
+
+    /* Hide scrollbars for ultra clean look */
+    .karaoke-stage-container::-webkit-scrollbar {
+      display: none;
+    }
+    .karaoke-stage-container {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .lyrics-list {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      text-align: center;
+    }
+
+    /* Individual Lyric Line */
+    .lyric-line {
+      position: relative;
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: clamp(18px, 5vw, 26px);
+      font-weight: 300;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, 0.35);
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 12px;
+      transform: scale(0.92);
+      transform-origin: center center;
+      transition: color 0.4s ease, opacity 0.4s ease, transform 0.4s var(--ease-smooth), font-weight 0.3s ease;
+      will-change: transform, opacity;
+    }
+
+    .lyric-line:hover {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Close neighbors (-1 and +1) */
+    .lyric-line.neighbor-1 {
+      opacity: 0.65;
+      transform: scale(0.96);
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    /* Distant neighbors (-2 and +2) */
+    .lyric-line.neighbor-2 {
+      opacity: 0.35;
+      transform: scale(0.9);
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    /* ACTIVE LYRIC LINE */
+    .lyric-line.active {
+      opacity: 1;
+      transform: scale(1.08);
+      font-weight: 600;
+      color: #ffffff;
+      text-shadow: 0 0 25px rgba(255, 117, 151, 0.4);
+    }
+
+    /* Dynamic Karaoke Gradient Highlight from Left to Right */
+    .lyric-highlight-text {
+      position: relative;
+      display: inline-block;
+      background: linear-gradient(
+        90deg,
+        #ff7597 0%,
+        #ffffff var(--line-progress, 0%),
+        rgba(255, 255, 255, 0.35) var(--line-progress, 0%),
+        rgba(255, 255, 255, 0.35) 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background 0.05s linear;
+    }
+
+    .lyric-line:not(.active) .lyric-highlight-text {
+      background: none;
+      -webkit-text-fill-color: inherit;
+    }
+
+    /* Karaoke Bottom Mini Controller */
+    .karaoke-bottom-bar {
+      width: 100%;
+      padding: 12px 24px calc(var(--safe-bottom) + 12px) 24px;
+      background: linear-gradient(0deg, rgba(8, 8, 12, 0.95) 0%, rgba(8, 8, 12, 0.6) 80%, transparent 100%);
+      z-index: 15;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .karaoke-mini-controls {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .karaoke-progress-box {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .karaoke-time-tag {
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-muted);
+      min-width: 36px;
+    }
+
+    /* ==========================================================================
+       SCREEN 08 — ENDING (EMOTIONAL FINALE)
+       ========================================================================== */
+    #screen-08 {
+      text-align: center;
+    }
+
+    .ending-card {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(14, 14, 20, 0.6);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-radius: 32px;
+      padding: 44px 30px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .ending-heart {
+      font-size: 36px;
+      color: var(--accent-pink);
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 16px var(--accent-pink-glow));
+      animation: heartBeat 2.5s infinite ease-in-out;
+    }
+
+    .ending-text {
+      font-family: var(--font-display);
+      font-size: clamp(19px, 5.5vw, 24px);
+      font-weight: 400;
+      line-height: 1.7;
+      color: #ffffff;
+      margin-bottom: 36px;
+      text-shadow: 0 2px 15px rgba(0, 0, 0, 0.7);
+    }
+
+    .ending-text span {
+      display: block;
+      color: var(--accent-pink);
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    .btn-replay-story {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 36px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 117, 151, 0.3) 100%);
+      border: 1px solid var(--glass-border-light);
+      color: #ffffff;
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 117, 151, 0.25);
+      transition: all 0.3s var(--ease-smooth);
+    }
+
+    .btn-replay-story:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 117, 151, 0.45);
+    }
+
+    /* ==========================================================================
+       RESPONSIVE ADAPTATIONS (IPAD / TABLET / LARGE SCREENS)
+       ========================================================================== */
+    @media (min-width: 768px) {
+      .story-card {
+        max-width: 600px;
+      }
+      
+      .story-bubble {
+        padding: 48px 40px;
+      }
+      
+      .story-text {
+        font-size: 21px;
+      }
+      
+      .vinyl-stage-container {
+        max-width: 380px;
+      }
+      
+      .player-controls-container {
+        max-width: 540px;
+        padding: 24px 32px;
+      }
+      
+      .lyric-line {
+        font-size: 28px;
+        padding: 8px 16px;
+      }
+      
+      .lyric-line.active {
+        transform: scale(1.12);
+      }
+    }
+
+    /* Accessibility: Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+      }
+      
+      .vinyl-disc {
+        animation: none !important;
+      }
+      
+      .bg-image {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Audio Element (Single source: ./music.mp3) -->
+  <audio id="audio" src="./music.mp3" preload="metadata"></audio>
+
+  <!-- Global Dynamic Background Layer -->
+  <div id="global-bg-container">
+    <div id="global-bg" class="bg-image bg-state-welcome"></div>
+    <div class="bg-overlay"></div>
+    <div class="bg-vignette"></div>
+    <canvas id="ambient-canvas"></canvas>
+  </div>
+
+  <!-- SPA Screen Viewport -->
+  <div class="app-viewport">
+
+    <!-- ==========================================
+         SCREEN 01 — WELCOME
+         ========================================== -->
+    <section id="screen-01" class="screen active" aria-label="หน้าต้อนรับ">
+      <div class="story-card">
+        <div class="welcome-badge">
+          <span>OUR LOVE STORY</span>
+        </div>
+        <div>
+          <span class="heart-icon">♡</span>
+        </div>
+        <h1 class="welcome-title">มีบางอย่าง<br>ที่อยากให้เธอฟัง</h1>
+        <p class="welcome-subtitle">เรื่องราวเล็ก ๆ และบทเพลงที่ตั้งใจมอบให้เธอคนเดียว</p>
+        <button id="btn-start-story" class="btn-glass-start" aria-label="เริ่มเรื่องราว">
+          <span>เริ่มเรื่องราว</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCREEN 02 — STORY 01
+         ========================================== -->
+    <section id="screen-02" class="screen" aria-label="เรื่องราวตอนที่ 1">
+      <div class="story-card">
+        <div class="story-bubble">
+          <div class="story-text">
+            <p>เราอาจไม่ได้เป็นคู่ ที่เข้าใจกันทุกเรื่อง</p>
+            <p>มีทั้งวันที่งอนกัน น้อยใจกัน และเข้าใจกันผิด</p>
+            <p>แต่ทุกครั้งที่ผ่านมันมาได้ เราก็ยังเลือกที่จะอยู่ตรงนี้ด้วยกัน</p>
+          </div>
+        </div>
+        <div class="story-dots">
+          <div class="story-dot active"></div>
+          <div class="story-dot"></div>
+          <div class="story-dot"></div>
+        </div>
+        <div class="story-skip-hint" onclick="goToScreen('screen-03')">แตะเพื่อไปต่อ หรือรอสักครู่...</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCREEN 03 — STORY 02
+         ========================================== -->
+    <section id="screen-03" class="screen" aria-label="เรื่องราวตอนที่ 2">
+      <div class="story-card">
+        <div class="story-bubble">
+          <div class="story-text">
+            <p>เค้าอาจไม่ใช่คน ที่พูดคำหวานเก่ง</p>
+            <p>บางครั้งสิ่งที่อยู่ในใจ มันมีเยอะมาก แต่กลับไม่รู้ว่าจะพูดออกมายังไง</p>
+            <p>เลยอาจทำให้แฟนไม่รู้ว่า จริง ๆ แล้วเค้ารู้สึกมากแค่ไหน</p>
+          </div>
+        </div>
+        <div class="story-dots">
+          <div class="story-dot"></div>
+          <div class="story-dot active"></div>
+          <div class="story-dot"></div>
+        </div>
+        <div class="story-skip-hint" onclick="goToScreen('screen-04')">แตะเพื่อไปต่อ หรือรอสักครู่...</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCREEN 04 — STORY 03
+         ========================================== -->
+    <section id="screen-04" class="screen" aria-label="เรื่องราวตอนที่ 3">
+      <div class="story-card">
+        <div class="story-bubble">
+          <div class="story-text">
+            <p>เพราะงั้นเพลงนี้ เค้าอยากให้มันเป็นคำพูดแทนทุกอย่าง ที่บางครั้งเค้าพูดออกมาไม่ได้</p>
+            <p>และถ้ามีเพลงหนึ่งเพลง ที่เค้าอยากให้แฟนจำไว้...</p>
+            <p><span class="highlight-climax">เพลงนี้ก็คือเพลงนั้น</span></p>
+          </div>
+        </div>
+        <div class="story-dots">
+          <div class="story-dot"></div>
+          <div class="story-dot"></div>
+          <div class="story-dot active"></div>
+        </div>
+        <div class="story-skip-hint" onclick="goToScreen('screen-05')">เตรียมพร้อมฟังบทเพลงพิเศษ...</div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCREEN 05 — SONG INTRO
+         ========================================== -->
+    <section id="screen-05" class="screen" aria-label="แนะนำบทเพลง">
+      <div class="intro-box">
+        <div class="intro-badge">THE ONLY ONE LOVE SONG</div>
+        <h2 class="intro-title">เพลงรัก</h2>
+        <div class="intro-artist">Three Man Down</div>
+        <div class="intro-preview-disc"></div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCREEN 06 — MUSIC PLAYER
+         ========================================== -->
+    <section id="screen-06" class="screen" aria-label="เครื่องเล่นเพลง">
+      
+      <!-- Top Navigation Bar -->
+      <div class="player-header">
+        <div class="player-header-title">NOW PLAYING</div>
+        <button class="btn-header-action" onclick="goToScreen('screen-02')" aria-label="อ่านเรื่องราวอีกครั้ง">
+          <span>📖 เรื่องราว</span>
+        </button>
+      </div>
+
+      <!-- Vinyl Record Display -->
+      <div class="vinyl-stage-container">
+        <div id="vinyl-record" class="vinyl-disc">
+          <div class="vinyl-center-label">
+            <div class="vinyl-spindle-hole"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Track Information -->
+      <div class="player-track-info">
+        <h2 class="player-song-title">เพลงรัก</h2>
+        <div class="player-artist-name">Three Man Down</div>
+      </div>
+
+      <!-- Mini Lyric Preview Box -->
+      <div class="player-lyric-preview-box" id="mini-lyric-box" onclick="goToScreen('screen-07')" aria-label="เปิดหน้าเนื้อเพลงคาราโอเกะ">
+        <div class="lyric-preview-content">
+          <div class="lyric-preview-label">── LYRICS PREVIEW ──</div>
+          <div class="lyric-preview-text" id="mini-lyric-text">กำลังโหลดเนื้อเพลง...</div>
+        </div>
+        <div class="btn-open-lyrics-badge">
+          <span>Karaoke</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Audio Controls Card -->
+      <div class="player-controls-container">
+        <!-- Seek Progress Bar -->
+        <div class="progress-bar-wrapper" id="progress-wrapper" role="slider" aria-label="แถบความคืบหน้าเพลง" tabindex="0">
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+            <div class="progress-thumb-knob" id="progress-knob"></div>
+          </div>
+        </div>
+
+        <div class="progress-time-row">
+          <span id="current-time-text">0:00</span>
+          <span id="duration-time-text">0:00</span>
+        </div>
+
+        <!-- Buttons Row -->
+        <div class="controls-btn-row">
+          <!-- Replay Button -->
+          <button class="btn-ctrl" id="btn-replay" aria-label="เริ่มเล่นใหม่" title="เริ่มใหม่">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+          </button>
+
+          <!-- Skip 10s Backward -->
+          <button class="btn-ctrl" id="btn-skip-back" aria-label="ย้อนหลัง 10 วินาที" title="ย้อน 10s">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/>
+            </svg>
+          </button>
+
+          <!-- Play / Pause Main Button -->
+          <button class="btn-ctrl-play-main" id="btn-main-play" aria-label="เล่นหรือหยุดเพลง">
+            <svg id="play-icon" width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="6 4 20 12 6 20 6 4"></polygon>
+            </svg>
+            <svg id="pause-icon" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+              <rect x="6" y="4" width="4" height="16"></rect>
+              <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+          </button>
+
+          <!-- Skip 10s Forward -->
+          <button class="btn-ctrl" id="btn-skip-forward" aria-label="ข้ามไปข้างหน้า 10 วินาที" title="ข้าม 10s">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 17l5-5-5-5M6 17l5-5-5-5"/>
+            </svg>
+          </button>
+
+          <!-- Open Karaoke Full Button -->
+          <button class="btn-ctrl" onclick="goToScreen('screen-07')" aria-label="เปิดโหมดคาราโอเกะ" title="เนื้อเพลง">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18V5l12-2v13"></path>
+              <circle cx="6" cy="18" r="3"></circle>
+              <circle cx="18" cy="16" r="3"></circle>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCREEN 07 — FULL KARAOKE
+         ========================================== -->
+    <section id="screen-07" class="screen" aria-label="หน้าจอเนื้อเพลงคาราโอเกะ">
+      <!-- Top Bar -->
+      <div class="karaoke-top-bar">
+        <button class="btn-karaoke-back" onclick="goToScreen('screen-06')" aria-label="กลับไปหน้าเครื่องเล่น">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span>เครื่องเล่น</span>
+        </button>
+        <div class="karaoke-song-tag">✦ เพลงรัก — Three Man Down ✦</div>
+      </div>
+
+      <!-- Karaoke Scrolling Area -->
+      <div class="karaoke-stage-container" id="karaoke-scroll-container">
+        <div class="lyrics-list" id="lyrics-list-container">
+          <!-- Lyric lines generated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Karaoke Bottom Bar -->
+      <div class="karaoke-bottom-bar">
+        <div class="karaoke-mini-controls">
+          <button class="btn-ctrl" id="btn-karaoke-play-toggle" aria-label="เล่นหรือหยุดเพลง">
+            <svg id="karaoke-play-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="6 4 20 12 6 20 6 4"></polygon>
+            </svg>
+            <svg id="karaoke-pause-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+              <rect x="6" y="4" width="4" height="16"></rect>
+              <rect x="14" y="4" width="4" height="16"></rect>
+            </svg>
+          </button>
+
+          <div class="karaoke-progress-box">
+            <span class="karaoke-time-tag" id="karaoke-current-time">0:00</span>
+            <div class="progress-bar-wrapper" id="karaoke-progress-wrapper" style="flex:1; margin-bottom:0;">
+              <div class="progress-track" style="height: 4px;">
+                <div class="progress-fill" id="karaoke-progress-fill"></div>
+              </div>
+            </div>
+            <span class="karaoke-time-tag" id="karaoke-duration-time">0:00</span>
+          </div>
+
+          <button class="btn-ctrl" onclick="goToScreen('screen-08')" aria-label="ดูตอนจบ" title="ข้อความส่งท้าย">
+            <span style="font-size: 16px;">♡</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SCREEN 08 — ENDING
+         ========================================== -->
+    <section id="screen-08" class="screen" aria-label="ข้อความส่งท้าย">
+      <div class="ending-card">
+        <div class="ending-heart">♡</div>
+        <div class="ending-text">
+          เพลงนี้อาจมีแค่เพลงเดียว<br>
+          แต่ความหมายของมัน<br>
+          <span>จะอยู่กับเค้าเสมอ ♡</span>
+        </div>
+        <button class="btn-replay-story" id="btn-replay-all" aria-label="ฟังอีกครั้ง">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          <span>ฟังอีกครั้ง</span>
+        </button>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ==========================================================================
+       JAVASCRIPT ENGINE (SPA ROUTING, AUDIO, KARAOKE SYNC, GESTURES)
+       ========================================================================== -->
+  <script>
+    (function() {
+      'use strict';
+
+      /* --- 1. LYRICS DATA --- */
+      const LYRICS_DATA = [
+        { time: 22.30, text: "ในค่ำคืนที่ไม่มีดาวบนฟ้า" },
+        { time: 25.98, text: "เป็นค่ำคืนที่แสนจะธรรมดา" },
+        { time: 28.47, text: "บรรยากาศรอบตัวไม่ค่อยช่วยฉันเลย" },
+        { time: 34.82, text: "อยากจะดึงมือเธอมากุมเอาไว้" },
+        { time: 37.83, text: "บอกว่ารักเธอมากมายแค่ไหน" },
+        { time: 40.22, text: "แต่ว่าฉันก็ไม่เคยได้พูดไป" },
+        { time: 46.61, text: "เพราะปกติ ฉันพูดไม่เก่ง" },
+        { time: 52.39, text: "เธอก็คงจะรับและรู้เรื่องนี้ดีกว่าใครใคร" },
+        { time: 58.21, text: "และเหตุผลที่ฉันไม่พูดอะไร" },
+        { time: 63.83, text: "ที่หวานซึ้งหรือกินใจอย่างใครเขา" },
+        { time: 68.77, text: "เพราะฉันคิดว่าเพลงรัก ที่มอบให้เธอนั้น" },
+        { time: 74.95, text: "มันควรจะมีได้แค่เพลงเดียวเท่านั้นพอ" },
+        { time: 80.82, text: "หากว่ามีมากเกินไป คำหวานซึ้งใดใด" },
+        { time: 87.42, text: "อาจจะทำให้ความหมายน้อยลงไป อยากให้รู้" },
+        { time: 95.68, text: "ให้เราสื่อสารผ่านดวงตา ทุกครั้งที่มองกัน" },
+        { time: 102.19, text: "ให้เธอรับและรู้เอาไว้ว่าฉันไม่เคยหายไป" },
+        { time: 108.00, text: "ดาวบนฟ้าที่เลือนลาง เพราะแสงของเมืองใหญ่" },
+        { time: 114.03, text: "แต่ว่ามันไม่เคยจากไปไหน" },
+        { time: 120.36, text: "เพราะปกติ ฉันพูดไม่เก่ง" },
+        { time: 126.16, text: "เธอก็คงจะรับและรู้เรื่องนี้ดีกว่าใครใคร" },
+        { time: 132.20, text: "และเหตุผลที่ฉันไม่พูดอะไร" },
+        { time: 137.42, text: "ที่หวานซึ้งหรือกินใจอย่างใครเขา" },
+        { time: 142.58, text: "เพราะฉันคิดว่าเพลงรัก ที่มอบให้เธอนั้น" },
+        { time: 148.48, text: "มันควรจะมีได้แค่เพลงเดียวเท่านั้นพอ" },
+        { time: 154.66, text: "หากว่ามีมากเกินไป คำหวานซึ้งใดใด" },
+        { time: 160.93, text: "อาจจะทำให้ความหมายน้อยลงไป" },
+        { time: 166.33, text: "เช่นเดียวกับคำว่ารัก หากพูดบ่อยบ่อยครั้ง" },
+        { time: 172.24, text: "กลัวเธอจะไม่รู้สึกซึ้งเหมือนเมื่อก่อน" },
+        { time: 178.37, text: "ถึงไม่ค่อยได้พูดไป แต่ว่าข้างในใจ" },
+        { time: 184.65, text: "คนคนนี้รักเธอมากกว่าผู้ใด อยากให้รู้" },
+        { time: 190.69, text: "That's the only one love song for you" },
+        { time: 196.58, text: "เพลงที่ฉันเขียนให้เธอ จะไม่มีวันหมดความหมาย" },
+        { time: 202.83, text: "ต่อให้ฉันไม่อยู่อีกแล้ว หรือว่าร้อยปีพ้นไป" },
+        { time: 208.36, text: "รักของฉันจะอยู่ตลอดไป" },
+        { time: 213.30, text: "เพราะฉันคิดว่าเพลงรัก ที่มอบให้เธอนั้น" },
+        { time: 219.47, text: "มันควรจะมีได้แค่เพลงเดียวเท่านั้นพอ" },
+        { time: 225.68, text: "หากว่ามีมากเกินไป คำหวานซึ้งใดใด" },
+        { time: 231.91, text: "อาจจะทำให้ความหมายน้อยลงไป" },
+        { time: 237.17, text: "เช่นเดียวกับคำว่ารัก หากพูดบ่อยบ่อยครั้ง" },
+        { time: 243.20, text: "กลัวเธอจะไม่รู้สึกซึ้งเหมือนเมื่อก่อน (เหมือนเมื่อก่อน)" },
+        { time: 249.15, text: "ถึงไม่ค่อยได้พูดไป แต่ว่าข้างในใจ" },
+        { time: 255.44, text: "คนคนนี้รักเธอมากกว่าผู้ใด อยากให้รู้" }
+      ];
+
+      /* --- 2. DOM REFERENCES --- */
+      const audio = document.getElementById('audio');
+      const globalBg = document.getElementById('global-bg');
+      const screens = document.querySelectorAll('.screen');
+      
+      const vinylRecord = document.getElementById('vinyl-record');
+      const btnMainPlay = document.getElementById('btn-main-play');
+      const playIcon = document.getElementById('play-icon');
+      const pauseIcon = document.getElementById('pause-icon');
+      const btnKaraokePlayToggle = document.getElementById('btn-karaoke-play-toggle');
+      const karaokePlayIcon = document.getElementById('karaoke-play-icon');
+      const karaokePauseIcon = document.getElementById('karaoke-pause-icon');
+
+      const progressWrapper = document.getElementById('progress-wrapper');
+      const progressFill = document.getElementById('progress-fill');
+      const progressKnob = document.getElementById('progress-knob');
+      const currentTimeText = document.getElementById('current-time-text');
+      const durationTimeText = document.getElementById('duration-time-text');
+
+      const miniLyricText = document.getElementById('mini-lyric-text');
+      const lyricsListContainer = document.getElementById('lyrics-list-container');
+      const karaokeScrollContainer = document.getElementById('karaoke-scroll-container');
+      const karaokeProgressFill = document.getElementById('karaoke-progress-fill');
+      const karaokeProgressWrapper = document.getElementById('karaoke-progress-wrapper');
+      const karaokeCurrentTime = document.getElementById('karaoke-current-time');
+      const karaokeDurationTime = document.getElementById('karaoke-duration-time');
+
+      let currentScreenId = 'screen-01';
+      let storyTimer = null;
+      let activeLyricIndex = -1;
+      let isSeeking = false;
+      let lyricLineElements = [];
+
+      /* --- 3. SPA SCREEN ROUTER --- */
+      function showScreen(screenId) {
+        if (storyTimer) {
+          clearTimeout(storyTimer);
+          storyTimer = null;
+        }
+
+        const prevScreen = document.getElementById(currentScreenId);
+        const nextScreen = document.getElementById(screenId);
+
+        if (!nextScreen) return;
+
+        screens.forEach(s => {
+          if (s.id !== screenId) {
+            s.classList.remove('active');
+          }
+        });
+
+        nextScreen.classList.add('active');
+        currentScreenId = screenId;
+
+        // Update Background Styling based on Screen
+        updateBackgroundState(screenId);
+
+        // Screen-specific flow triggers
+        if (screenId === 'screen-02') {
+          storyTimer = setTimeout(() => { showScreen('screen-03'); }, 3800);
+        } else if (screenId === 'screen-03') {
+          storyTimer = setTimeout(() => { showScreen('screen-04'); }, 3800);
+        } else if (screenId === 'screen-04') {
+          storyTimer = setTimeout(() => { showScreen('screen-05'); }, 4400);
+        } else if (screenId === 'screen-05') {
+          nextScreen.classList.remove('revealed');
+          void nextScreen.offsetWidth; // trigger reflow
+          nextScreen.classList.add('revealed');
+          storyTimer = setTimeout(() => { showScreen('screen-06'); }, 3200);
+        } else if (screenId === 'screen-07') {
+          // Immediately align karaoke
+          scrollActiveLyricIntoView(activeLyricIndex, true);
+        }
+      }
+
+      window.goToScreen = showScreen;
+
+      function updateBackgroundState(screenId) {
+        globalBg.className = 'bg-image';
+        switch (screenId) {
+          case 'screen-01':
+            globalBg.classList.add('bg-state-welcome');
+            break;
+          case 'screen-02':
+            globalBg.classList.add('bg-state-story-1');
+            break;
+          case 'screen-03':
+            globalBg.classList.add('bg-state-story-2');
+            break;
+          case 'screen-04':
+            globalBg.classList.add('bg-state-story-3');
+            break;
+          case 'screen-05':
+            globalBg.classList.add('bg-state-intro');
+            break;
+          case 'screen-06':
+            globalBg.classList.add('bg-state-player');
+            break;
+          case 'screen-07':
+            globalBg.classList.add('bg-state-karaoke');
+            break;
+          case 'screen-08':
+            globalBg.classList.add('bg-state-ending');
+            break;
+          default:
+            globalBg.classList.add('bg-state-player');
+        }
+      }
+
+      /* --- 4. BUILD KARAOKE DOM --- */
+      function initKaraokeDOM() {
+        lyricsListContainer.innerHTML = '';
+        lyricLineElements = [];
+
+        LYRICS_DATA.forEach((item, index) => {
+          const lineEl = document.createElement('div');
+          lineEl.className = 'lyric-line';
+          lineEl.setAttribute('data-index', index);
+          lineEl.setAttribute('data-time', item.time);
+          
+          const textSpan = document.createElement('span');
+          textSpan.className = 'lyric-highlight-text';
+          textSpan.textContent = item.text;
+          lineEl.appendChild(textSpan);
+
+          // Click on lyric to seek
+          lineEl.addEventListener('click', () => {
+            audio.currentTime = item.time;
+            if (audio.paused) {
+              audio.play().catch(() => {});
+            }
+          });
+
+          lyricsListContainer.appendChild(lineEl);
+          lyricLineElements.push(lineEl);
+        });
+      }
+
+      /* --- 5. AUDIO PLAYBACK & SYNC --- */
+      function formatTime(seconds) {
+        if (isNaN(seconds) || seconds < 0) return '0:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+      }
+
+      function updatePlayStateUI(isPlaying) {
+        if (isPlaying) {
+          vinylRecord.style.animationPlayState = 'running';
+          playIcon.style.display = 'none';
+          pauseIcon.style.display = 'block';
+          karaokePlayIcon.style.display = 'none';
+          karaokePauseIcon.style.display = 'block';
+        } else {
+          vinylRecord.style.animationPlayState = 'paused';
+          playIcon.style.display = 'block';
+          pauseIcon.style.display = 'none';
+          karaokePlayIcon.style.display = 'block';
+          karaokePauseIcon.style.display = 'none';
+        }
+      }
+
+      function togglePlayPause() {
+        if (audio.paused) {
+          audio.play().then(() => {
+            updatePlayStateUI(true);
+          }).catch(err => {
+            console.log("Audio play prevented:", err);
+          });
+        } else {
+          audio.pause();
+          updatePlayStateUI(false);
+        }
+      }
+
+      // Audio Event Listeners
+      audio.addEventListener('play', () => updatePlayStateUI(true));
+      audio.addEventListener('pause', () => updatePlayStateUI(false));
+      
+      audio.addEventListener('loadedmetadata', () => {
+        const dur = audio.duration || 265;
+        durationTimeText.textContent = formatTime(dur);
+        karaokeDurationTime.textContent = formatTime(dur);
+      });
+
+      audio.addEventListener('ended', () => {
+        updatePlayStateUI(false);
+        showScreen('screen-08');
+      });
+
+      // Synchronize Karaoke and Progress on every Frame / Time Update
+      function syncKaraokeAndProgress() {
+        if (!audio.duration || isSeeking) return;
+
+        const curTime = audio.currentTime;
+        const totalDuration = audio.duration;
+        const progressPercent = (curTime / totalDuration) * 100;
+
+        // Update Progress Bars
+        progressFill.style.width = `${progressPercent}%`;
+        progressKnob.style.left = `${progressPercent}%`;
+        karaokeProgressFill.style.width = `${progressPercent}%`;
+
+        currentTimeText.textContent = formatTime(curTime);
+        karaokeCurrentTime.textContent = formatTime(curTime);
+
+        // Find Active Lyric Index
+        let currentIdx = -1;
+        for (let i = 0; i < LYRICS_DATA.length; i++) {
+          if (curTime >= LYRICS_DATA[i].time) {
+            currentIdx = i;
+          } else {
+            break;
+          }
+        }
+
+        if (currentIdx !== activeLyricIndex) {
+          activeLyricIndex = currentIdx;
+          updateLyricClasses(activeLyricIndex);
+          if (currentScreenId === 'screen-07') {
+            scrollActiveLyricIntoView(activeLyricIndex);
+          }
+        }
+
+        // Mini lyric preview text update
+        if (activeLyricIndex >= 0 && activeLyricIndex < LYRICS_DATA.length) {
+          miniLyricText.textContent = LYRICS_DATA[activeLyricIndex].text;
+        } else {
+          miniLyricText.textContent = "Three Man Down — เพลงรัก";
+        }
+
+        // Intra-line Karaoke Progress Highlighting (Left to Right Fill)
+        if (activeLyricIndex >= 0 && activeLyricIndex < LYRICS_DATA.length) {
+          const currentLineStartTime = LYRICS_DATA[activeLyricIndex].time;
+          let nextLineStartTime;
+
+          if (activeLyricIndex + 1 < LYRICS_DATA.length) {
+            nextLineStartTime = LYRICS_DATA[activeLyricIndex + 1].time;
+          } else {
+            nextLineStartTime = currentLineStartTime + 6.0; // fallback duration for last line
+          }
+
+          const lineDuration = Math.max(0.1, nextLineStartTime - currentLineStartTime);
+          const elapsed = curTime - currentLineStartTime;
+          const lineProgressPercent = Math.min(100, Math.max(0, (elapsed / lineDuration) * 100));
+
+          const activeEl = lyricLineElements[activeLyricIndex];
+          if (activeEl) {
+            const span = activeEl.querySelector('.lyric-highlight-text');
+            if (span) {
+              span.style.setProperty('--line-progress', `${lineProgressPercent}%`);
+            }
+          }
+        }
+      }
+
+      function updateLyricClasses(activeIdx) {
+        lyricLineElements.forEach((el, idx) => {
+          el.className = 'lyric-line';
+          const span = el.querySelector('.lyric-highlight-text');
+          if (span) {
+            span.style.setProperty('--line-progress', '0%');
+          }
+
+          if (idx === activeIdx) {
+            el.classList.add('active');
+          } else if (idx === activeIdx - 1 || idx === activeIdx + 1) {
+            el.classList.add('neighbor-1');
+          } else if (idx === activeIdx - 2 || idx === activeIdx + 2) {
+            el.classList.add('neighbor-2');
+          }
+        });
+      }
+
+      function scrollActiveLyricIntoView(index, immediate = false) {
+        if (index < 0 || index >= lyricLineElements.length) return;
+        const targetEl = lyricLineElements[index];
+        if (!targetEl) return;
+
+        const containerHeight = karaokeScrollContainer.clientHeight;
+        const targetOffsetTop = targetEl.offsetTop;
+        const targetHeight = targetEl.clientHeight;
+
+        const scrollTarget = targetOffsetTop - (containerHeight / 2) + (targetHeight / 2);
+
+        karaokeScrollContainer.scrollTo({
+          top: Math.max(0, scrollTarget),
+          behavior: immediate ? 'auto' : 'smooth'
+        });
+      }
+
+      // Continuous Smooth Frame Loop for Audio Sync
+      function renderLoop() {
+        syncKaraokeAndProgress();
+        requestAnimationFrame(renderLoop);
+      }
+      requestAnimationFrame(renderLoop);
+
+      /* --- 6. SEEK & PROGRESS INTERACTION --- */
+      function setupSeekControl(wrapperEl) {
+        function seek(e) {
+          const rect = wrapperEl.getBoundingClientRect();
+          const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+          const pos = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+          
+          if (audio.duration) {
+            audio.currentTime = pos * audio.duration;
+            syncKaraokeAndProgress();
+          }
+        }
+
+        wrapperEl.addEventListener('mousedown', (e) => {
+          isSeeking = true;
+          seek(e);
+          
+          const onMouseMove = (moveEvent) => seek(moveEvent);
+          const onMouseUp = () => {
+            isSeeking = false;
+            window.removeEventListener('mousemove', onMouseMove);
+            window.removeEventListener('mouseup', onMouseUp);
+          };
+          window.addEventListener('mousemove', onMouseMove);
+          window.addEventListener('mouseup', onMouseUp);
+        });
+
+        wrapperEl.addEventListener('touchstart', (e) => {
+          isSeeking = true;
+          seek(e);
+        }, { passive: true });
+
+        wrapperEl.addEventListener('touchmove', (e) => {
+          seek(e);
+        }, { passive: true });
+
+        wrapperEl.addEventListener('touchend', () => {
+          isSeeking = false;
+        });
+      }
+
+      setupSeekControl(progressWrapper);
+      setupSeekControl(karaokeProgressWrapper);
+
+      /* --- 7. BUTTON CONTROLS & EVENT HANDLERS --- */
+      // Welcome Screen Start Button
+      document.getElementById('btn-start-story').addEventListener('click', () => {
+        // Unlock audio autoplay on user gesture
+        audio.play().then(() => {
+          updatePlayStateUI(true);
+        }).catch(() => {
+          // graceful handle if file not found or browser restricted
+        });
+        showScreen('screen-02');
+      });
+
+      // Main Play / Pause Button
+      btnMainPlay.addEventListener('click', togglePlayPause);
+      btnKaraokePlayToggle.addEventListener('click', togglePlayPause);
+
+      // Skip 10s Forward & Backward
+      document.getElementById('btn-skip-forward').addEventListener('click', () => {
+        if (audio.duration) {
+          audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+        }
+      });
+
+      document.getElementById('btn-skip-back').addEventListener('click', () => {
+        audio.currentTime = Math.max(0, audio.currentTime - 10);
+      });
+
+      // Replay Track Button
+      document.getElementById('btn-replay').addEventListener('click', () => {
+        audio.currentTime = 0;
+        audio.play().catch(() => {});
+      });
+
+      // Ending Screen Replay Button
+      document.getElementById('btn-replay-all').addEventListener('click', () => {
+        audio.currentTime = 0;
+        audio.play().catch(() => {});
+        showScreen('screen-02');
+      });
+
+      /* --- 8. SWIPE GESTURE SUPPORT ON STORY SCREENS --- */
+      let touchStartX = 0;
+      let touchStartY = 0;
+
+      window.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      window.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+        const diffX = touchEndX - touchStartX;
+        const diffY = touchEndY - touchStartY;
+
+        // Only handle horizontal swipes on intro story screens (Screens 1 to 4)
+        if (['screen-01', 'screen-02', 'screen-03', 'screen-04'].includes(currentScreenId)) {
+          if (Math.abs(diffX) > 45 && Math.abs(diffX) > Math.abs(diffY)) {
+            if (diffX < 0) {
+              // Swipe Left -> Next
+              if (currentScreenId === 'screen-01') showScreen('screen-02');
+              else if (currentScreenId === 'screen-02') showScreen('screen-03');
+              else if (currentScreenId === 'screen-03') showScreen('screen-04');
+              else if (currentScreenId === 'screen-04') showScreen('screen-05');
+            } else {
+              // Swipe Right -> Prev
+              if (currentScreenId === 'screen-04') showScreen('screen-03');
+              else if (currentScreenId === 'screen-03') showScreen('screen-02');
+              else if (currentScreenId === 'screen-02') showScreen('screen-01');
+            }
+          }
+        }
+      }, { passive: true });
+
+      /* --- 9. KEYBOARD ACCESSIBILITY CONTROLS --- */
+      window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
+          e.preventDefault();
+          togglePlayPause();
+        } else if (e.code === 'ArrowRight') {
+          audio.currentTime = Math.min(audio.duration || 300, audio.currentTime + 5);
+        } else if (e.code === 'ArrowLeft') {
+          audio.currentTime = Math.max(0, audio.currentTime - 5);
+        } else if (e.key === 'l' || e.key === 'L') {
+          if (currentScreenId === 'screen-06') showScreen('screen-07');
+          else if (currentScreenId === 'screen-07') showScreen('screen-06');
+        }
+      });
+
+      /* --- 10. AMBIENT SPARKLE CANVAS --- */
+      function initAmbientCanvas() {
+        const canvas = document.getElementById('ambient-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+          width = canvas.width = window.innerWidth;
+          height = canvas.height = window.innerHeight;
+        });
+
+        const particles = Array.from({ length: 28 }, () => ({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          size: Math.random() * 2 + 1,
+          speedY: Math.random() * 0.4 + 0.1,
+          speedX: (Math.random() - 0.5) * 0.2,
+          opacity: Math.random() * 0.5 + 0.2,
+          pulse: Math.random() * 0.02 + 0.005
+        }));
+
+        function drawParticles() {
+          ctx.clearRect(0, 0, width, height);
+          particles.forEach(p => {
+            p.y -= p.speedY;
+            p.x += p.speedX;
+            p.opacity += Math.sin(Date.now() * p.pulse) * 0.005;
+
+            if (p.y < 0) {
+              p.y = height + 10;
+              p.x = Math.random() * width;
+            }
+            if (p.x < 0) p.x = width;
+            if (p.x > width) p.x = 0;
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 180, 200, ${Math.max(0.1, Math.min(0.7, p.opacity))})`;
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = 'rgba(255, 117, 151, 0.5)';
+            ctx.fill();
+          });
+          requestAnimationFrame(drawParticles);
+        }
+        drawParticles();
+      }
+
+      // Initialize on Load
+      document.addEventListener('DOMContentLoaded', () => {
+        initKaraokeDOM();
+        initAmbientCanvas();
+        updateBackgroundState('screen-01');
+      });
+
+    })();
+  </script>
+</body>
+</html>
