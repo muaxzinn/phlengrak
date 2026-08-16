@@ -693,97 +693,154 @@
       text-overflow: ellipsis;
     }
 
-    /* Fullscreen Live Lyrics Area */
+    /* ==========================================================================
+       GLOWING POP-UP LYRIC SPOTLIGHT STAGE
+       ========================================================================== */
     .spotify-lyrics-stage {
       position: relative;
       flex: 1;
       width: 100%;
-      max-width: 760px;
+      max-width: 860px;
       margin: 0 auto;
-      overflow-y: auto;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-      padding: 30vh 28px 45vh 28px;
-      mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,1) 16%, rgba(0,0,0,1) 82%, transparent 100%);
-      -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,1) 16%, rgba(0,0,0,1) 82%, transparent 100%);
-    }
-
-    .spotify-lyrics-stage::-webkit-scrollbar {
-      display: none;
-    }
-    .spotify-lyrics-stage {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-
-    .spotify-lyrics-list {
       display: flex;
       flex-direction: column;
-      gap: 26px;
-      text-align: left;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 28px;
+      overflow: hidden;
+      perspective: 1000px;
     }
 
-    /* Spotify Big Typography Lyrics */
-    .lyric-line {
+    /* Radiant Ambient Light Aura Behind Active Lyric */
+    .lyric-glow-flare {
+      position: absolute;
+      top: 48%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      width: 380px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 117, 151, 0.38) 0%, rgba(255, 117, 151, 0.12) 50%, transparent 75%);
+      filter: blur(45px);
+      pointer-events: none;
+      opacity: 0.55;
+      transition: opacity 0.5s ease, transform 0.6s var(--ease-smooth);
+      z-index: 1;
+    }
+
+    .lyric-glow-flare.flare-burst {
+      transform: translate(-50%, -50%) scale(1.4);
+      opacity: 0.95;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 117, 151, 0.5) 40%, transparent 75%);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    }
+
+    .spotify-popup-container {
       position: relative;
-      display: block;
+      z-index: 2;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 24px;
+    }
+
+    /* Active Pop-Up Box */
+    .lyric-popup-active {
+      width: 100%;
+      min-height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+    }
+
+    /* Intro placeholder before first lyric */
+    .lyric-intro-placeholder {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-body);
+      font-size: clamp(16px, 4.5vw, 20px);
+      font-weight: 300;
+      color: var(--accent-pink);
+      letter-spacing: 1px;
+      background: rgba(255, 117, 151, 0.1);
+      border: 1px solid rgba(255, 117, 151, 0.25);
+      border-radius: 999px;
+      padding: 12px 28px;
+      box-shadow: 0 0 25px rgba(255, 117, 151, 0.25);
+      animation: pulseGlow 2.5s infinite ease-in-out;
+    }
+
+    .music-pulse-icon {
+      font-size: 20px;
+      animation: heartBeat 1.8s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.04); opacity: 1; box-shadow: 0 0 35px rgba(255, 117, 151, 0.45); }
+    }
+
+    /* Pop-up Text with Light Burst Animation */
+    .lyric-popup-text {
       font-family: var(--font-display);
-      font-size: clamp(28px, 6.8vw, 42px);
-      font-weight: 600;
-      line-height: 1.35;
-      letter-spacing: -0.2px;
-      color: rgba(255, 255, 255, 0.28);
-      cursor: pointer;
-      padding: 6px 10px;
-      border-radius: 12px;
-      transform-origin: left center;
-      transition: color 0.35s ease, opacity 0.35s ease, transform 0.35s var(--ease-smooth), text-shadow 0.35s ease;
-      will-change: transform, opacity, color;
-    }
-
-    .lyric-line:hover {
-      color: rgba(255, 255, 255, 0.65);
-    }
-
-    /* Distant & Neighbor styling */
-    .lyric-line.neighbor-1 {
-      opacity: 0.6;
-      color: rgba(255, 255, 255, 0.55);
-    }
-
-    .lyric-line.neighbor-2 {
-      opacity: 0.35;
-      color: rgba(255, 255, 255, 0.3);
-    }
-
-    /* ACTIVE LYRIC (SPOTIFY STYLE) */
-    .lyric-line.active {
-      opacity: 1;
-      transform: scale(1.03);
+      font-size: clamp(32px, 7.6vw, 54px);
       font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -0.5px;
       color: #ffffff;
-      text-shadow: 0 0 28px rgba(255, 117, 151, 0.45);
+      text-shadow: 
+        0 0 20px rgba(255, 117, 151, 0.95),
+        0 0 45px rgba(255, 117, 151, 0.65),
+        0 0 85px rgba(255, 117, 151, 0.4),
+        0 4px 15px rgba(0, 0, 0, 0.9);
+      will-change: transform, opacity, filter;
+      display: inline-block;
+      max-width: 720px;
     }
 
-    .lyric-highlight-text {
-      position: relative;
-      display: inline;
-      background: linear-gradient(
-        90deg,
-        #ff7597 0%,
-        #ffffff var(--line-progress, 0%),
-        rgba(255, 255, 255, 0.28) var(--line-progress, 0%),
-        rgba(255, 255, 255, 0.28) 100%
-      );
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      transition: background 0.04s linear;
+    /* Pop-In Glowing Light Animation */
+    .pop-in-glow {
+      animation: lyricLightPop 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    .lyric-line:not(.active) .lyric-highlight-text {
-      background: none;
-      -webkit-text-fill-color: inherit;
+    @keyframes lyricLightPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.72) translateY(22px);
+        filter: blur(14px) brightness(2.4);
+        text-shadow: 0 0 60px #ffffff, 0 0 90px var(--accent-pink);
+      }
+      45% {
+        transform: scale(1.08) translateY(-3px);
+        filter: blur(0px) brightness(1.5);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0px) brightness(1);
+        text-shadow: 
+          0 0 20px rgba(255, 117, 151, 0.95),
+          0 0 45px rgba(255, 117, 151, 0.65),
+          0 0 85px rgba(255, 117, 151, 0.4),
+          0 4px 15px rgba(0, 0, 0, 0.9);
+      }
+    }
+
+    /* Upcoming Next Line Preview */
+    .lyric-upcoming-preview {
+      font-family: var(--font-display);
+      font-size: clamp(16px, 4.2vw, 22px);
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.3);
+      line-height: 1.4;
+      max-width: 600px;
+      min-height: 32px;
+      transition: opacity 0.4s ease, transform 0.4s ease;
     }
 
     /* Minimal Bottom Line Progress */
@@ -1069,10 +1126,18 @@
         </div>
       </div>
 
-      <!-- Immersive Spotify Live Lyrics Stage -->
-      <div class="spotify-lyrics-stage" id="lyrics-scroll-container">
-        <div class="spotify-lyrics-list" id="lyrics-list-container">
-          <!-- Lyric lines dynamically injected -->
+      <!-- Glowing Pop-Up Lyric Center Stage -->
+      <div class="spotify-lyrics-stage">
+        <div class="lyric-glow-flare" id="lyric-glow-flare"></div>
+        <div class="spotify-popup-container">
+          <div class="lyric-popup-active" id="active-lyric-box">
+            <div class="lyric-intro-placeholder" id="lyric-intro-placeholder">
+              <span class="music-pulse-icon">♪</span>
+              <span class="music-intro-text">กำลังบรรเลงบทเพลงรัก...</span>
+            </div>
+            <div class="lyric-popup-text" id="active-lyric-text" style="display: none;"></div>
+          </div>
+          <div class="lyric-upcoming-preview" id="upcoming-lyric-text"></div>
         </div>
       </div>
 
@@ -1168,14 +1233,16 @@
       const vinylRecord = document.getElementById('vinyl-record');
       const progressWrapper = document.getElementById('progress-wrapper');
       const progressFill = document.getElementById('progress-fill');
-      const lyricsListContainer = document.getElementById('lyrics-list-container');
-      const lyricsScrollContainer = document.getElementById('lyrics-scroll-container');
+      
+      const activeLyricText = document.getElementById('active-lyric-text');
+      const lyricIntroPlaceholder = document.getElementById('lyric-intro-placeholder');
+      const upcomingLyricText = document.getElementById('upcoming-lyric-text');
+      const lyricGlowFlare = document.getElementById('lyric-glow-flare');
 
       let currentScreenId = 'screen-01';
       let storyTimer = null;
       let activeLyricIndex = -1;
       let isSeeking = false;
-      let lyricLineElements = [];
 
       /* --- 3. SPA SCREEN ROUTER --- */
       function showScreen(screenId) {
@@ -1213,11 +1280,6 @@
           void nextScreen.offsetWidth; // trigger reflow
           nextScreen.classList.add('revealed');
           storyTimer = setTimeout(() => { showScreen('screen-06'); }, 3200);
-        } else if (screenId === 'screen-06') {
-          // Center current lyric immediately upon entering player
-          setTimeout(() => {
-            scrollActiveLyricIntoView(activeLyricIndex, true);
-          }, 100);
         }
       }
 
@@ -1253,39 +1315,7 @@
         }
       }
 
-      /* --- 4. BUILD LYRICS DOM --- */
-      function initlyricsDOM() {
-        if (!lyricsListContainer) return;
-        lyricsListContainer.innerHTML = '';
-        lyricLineElements = [];
-
-        LYRICS_DATA.forEach((item, index) => {
-          const lineEl = document.createElement('div');
-          lineEl.className = 'lyric-line';
-          lineEl.setAttribute('data-index', index);
-          lineEl.setAttribute('data-time', item.time);
-          
-          const textSpan = document.createElement('span');
-          textSpan.className = 'lyric-highlight-text';
-          textSpan.textContent = item.text;
-          lineEl.appendChild(textSpan);
-
-          // Click on lyric to seek
-          lineEl.addEventListener('click', () => {
-            if (audio) {
-              audio.currentTime = item.time;
-              if (audio.paused) {
-                audio.play().catch(() => {});
-              }
-            }
-          });
-
-          lyricsListContainer.appendChild(lineEl);
-          lyricLineElements.push(lineEl);
-        });
-      }
-
-      /* --- 5. AUDIO PLAYBACK & SYNC --- */
+      /* --- 4. AUDIO PLAYBACK & SYNC --- */
       function updatePlayStateUI(isPlaying) {
         if (vinylRecord) {
           vinylRecord.style.animationPlayState = isPlaying ? 'running' : 'paused';
@@ -1321,6 +1351,49 @@
         });
       }
 
+      // Display Pop-up Lyric with Light Flare Burst
+      function renderActiveLyricPopUp(index) {
+        if (!activeLyricText) return;
+
+        if (index >= 0 && index < LYRICS_DATA.length) {
+          if (lyricIntroPlaceholder) lyricIntroPlaceholder.style.display = 'none';
+          activeLyricText.style.display = 'inline-block';
+          activeLyricText.textContent = LYRICS_DATA[index].text;
+
+          // Retrigger light pop-in animation
+          activeLyricText.classList.remove('pop-in-glow');
+          void activeLyricText.offsetWidth; // force DOM reflow
+          activeLyricText.classList.add('pop-in-glow');
+
+          // Trigger ambient light aura flare burst
+          if (lyricGlowFlare) {
+            lyricGlowFlare.classList.add('flare-burst');
+            setTimeout(() => {
+              if (lyricGlowFlare) lyricGlowFlare.classList.remove('flare-burst');
+            }, 500);
+          }
+
+          // Upcoming line preview
+          if (upcomingLyricText) {
+            if (index + 1 < LYRICS_DATA.length) {
+              upcomingLyricText.textContent = LYRICS_DATA[index + 1].text;
+              upcomingLyricText.style.opacity = '0.35';
+            } else {
+              upcomingLyricText.textContent = '♡';
+              upcomingLyricText.style.opacity = '0.5';
+            }
+          }
+        } else {
+          // Before the lyrics begin (instrumental intro)
+          if (lyricIntroPlaceholder) lyricIntroPlaceholder.style.display = 'inline-flex';
+          activeLyricText.style.display = 'none';
+          if (upcomingLyricText && LYRICS_DATA.length > 0) {
+            upcomingLyricText.textContent = 'กำลังจะเริ่ม: ' + LYRICS_DATA[0].text;
+            upcomingLyricText.style.opacity = '0.3';
+          }
+        }
+      }
+
       // Synchronize lyrics and Progress on every Frame / Time Update
       function synclyricsAndProgress() {
         if (!audio || !audio.duration || isSeeking) return;
@@ -1334,7 +1407,7 @@
           progressFill.style.width = `${progressPercent}%`;
         }
 
-        // Find Active Lyric Index
+        // Find Active Lyric Index based on timestamps
         let currentIdx = -1;
         for (let i = 0; i < LYRICS_DATA.length; i++) {
           if (curTime >= LYRICS_DATA[i].time) {
@@ -1346,70 +1419,8 @@
 
         if (currentIdx !== activeLyricIndex) {
           activeLyricIndex = currentIdx;
-          updateLyricClasses(activeLyricIndex);
-          if (currentScreenId === 'screen-06') {
-            scrollActiveLyricIntoView(activeLyricIndex);
-          }
+          renderActiveLyricPopUp(activeLyricIndex);
         }
-
-        // Intra-line lyrics Progress Highlighting (Left to Right Fill)
-        if (activeLyricIndex >= 0 && activeLyricIndex < LYRICS_DATA.length) {
-          const currentLineStartTime = LYRICS_DATA[activeLyricIndex].time;
-          let nextLineStartTime;
-
-          if (activeLyricIndex + 1 < LYRICS_DATA.length) {
-            nextLineStartTime = LYRICS_DATA[activeLyricIndex + 1].time;
-          } else {
-            nextLineStartTime = currentLineStartTime + 6.0; // fallback duration for last line
-          }
-
-          const lineDuration = Math.max(0.1, nextLineStartTime - currentLineStartTime);
-          const elapsed = curTime - currentLineStartTime;
-          const lineProgressPercent = Math.min(100, Math.max(0, (elapsed / lineDuration) * 100));
-
-          const activeEl = lyricLineElements[activeLyricIndex];
-          if (activeEl) {
-            const span = activeEl.querySelector('.lyric-highlight-text');
-            if (span) {
-              span.style.setProperty('--line-progress', `${lineProgressPercent}%`);
-            }
-          }
-        }
-      }
-
-      function updateLyricClasses(activeIdx) {
-        lyricLineElements.forEach((el, idx) => {
-          el.className = 'lyric-line';
-          const span = el.querySelector('.lyric-highlight-text');
-          if (span) {
-            span.style.setProperty('--line-progress', '0%');
-          }
-
-          if (idx === activeIdx) {
-            el.classList.add('active');
-          } else if (idx === activeIdx - 1 || idx === activeIdx + 1) {
-            el.classList.add('neighbor-1');
-          } else if (idx === activeIdx - 2 || idx === activeIdx + 2) {
-            el.classList.add('neighbor-2');
-          }
-        });
-      }
-
-      function scrollActiveLyricIntoView(index, immediate = false) {
-        if (!lyricsScrollContainer || index < 0 || index >= lyricLineElements.length) return;
-        const targetEl = lyricLineElements[index];
-        if (!targetEl) return;
-
-        const containerHeight = lyricsScrollContainer.clientHeight;
-        const targetOffsetTop = targetEl.offsetTop;
-        const targetHeight = targetEl.clientHeight;
-
-        const scrollTarget = targetOffsetTop - (containerHeight / 2) + (targetHeight / 2);
-
-        lyricsScrollContainer.scrollTo({
-          top: Math.max(0, scrollTarget),
-          behavior: immediate ? 'auto' : 'smooth'
-        });
       }
 
       // Continuous Smooth Frame Loop for Audio Sync
@@ -1594,7 +1605,7 @@
 
       // Initialize on Load
       document.addEventListener('DOMContentLoaded', () => {
-        initlyricsDOM();
+        renderActiveLyricPopUp(-1);
         initAmbientCanvas();
         updateBackgroundState('screen-01');
       });
@@ -1603,3 +1614,4 @@
   </script>
 </body>
 </html>
+
